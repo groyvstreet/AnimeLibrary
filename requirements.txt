@@ -1,0 +1,12 @@
+asgiref==3.5.1
+backports.zoneinfo==0.2.1
+cffi==1.15.0
+coverage==6.3.2
+cryptography==37.0.2
+cx-Oracle==8.3.0
+Django==4.0.4
+django-rest-knox==4.2.0
+djangorestframework==3.13.1
+pycparser==2.21
+pytz==2022.1
+sqlparse==0.4.2
