@@ -5,7 +5,7 @@ from .models import Anime
 
 
 class AnimeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'description', 'date')
+    list_display = ('id', 'title', 'description', 'episodes_number', 'date', 'rating')
     list_display_links = ('id', 'title')
     search_fields = ('id', 'title', 'description')
 
