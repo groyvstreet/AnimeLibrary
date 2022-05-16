@@ -1,0 +1,15 @@
+{% extends "catalog/base_generic.html" %}
+
+{% block title %}<title>{{ anime.title }}</title>{% endblock %}
+
+{% block content %}
+  <h1>{{ anime.title }}</h1>
+
+  <p><strong>Жанр:</strong> {{ anime.display_genre }}</p>
+  <p><strong>Дата выхода:</strong> {{ anime.date }}</p>
+  <p><strong>Статус:</strong> {{ anime.status }}</p>
+  <p><strong>Эпизоды:</strong> {{ anime.episodes_number }}</p>
+  <p><strong>Длительность эпизода:</strong> {{ anime.episode_duration }}</p>
+  <p><strong>Рейтинг:</strong> {{ anime.rating }}</p>
+  <p><strong>Описание:</strong> {{ anime.description }}</p>
+{% endblock %}

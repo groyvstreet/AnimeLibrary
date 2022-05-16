@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -44,6 +45,9 @@ class Anime(models.Model):
         return self.description[:80] + '...'
 
     display_description.short_description = 'Описание'
+
+    def get_absolute_url(self):
+        return reverse('detail', args=(self.id,))
 
 
 class Comment(models.Model):

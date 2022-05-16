@@ -1,0 +1,18 @@
+{% extends "catalog/base_generic.html" %}
+
+{% block content %}
+<a href="{% url 'index' %}"><h1>Сейчас на экранах</h1></a>
+
+    {% if animes %}
+    <ul>
+        {% for anime in animes %}
+        <li>
+            <a href="{{ anime.get_absolute_url }}">{{ anime.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>Список пуст</p>
+    {% endif %}
+
+{% endblock %}
