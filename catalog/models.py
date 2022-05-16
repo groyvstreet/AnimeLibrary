@@ -33,10 +33,22 @@ class Anime(models.Model):
     def __str__(self):
         return self.title
 
+    def display_genre(self):
+        """Creates a string for the Genre. This is required to display genre in Admin."""
+        return ', '.join([genre.name for genre in self.genre.all()])
+
+    display_genre.short_description = 'Жанр'
+
+    def display_description(self):
+        """Creates a string for the description. This is required to display description in Admin."""
+        return self.description[:80] + '...'
+
+    display_description.short_description = 'Описание'
+
 
 class Comment(models.Model):
     date = models.DateTimeField('Время', null=True, auto_now_add=True)
-    text = models.TextField(max_length=100000, help_text='Введите комментарий')
+    text = models.TextField('Текст',  max_length=100000, help_text='Введите комментарий')
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE, null=True)
 
     class Meta:
@@ -44,3 +56,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+    def display_text(self):
+        """Creates a string for the description. This is required to display description in Admin."""
+        return self.text[:120] + '...'
+
+    display_text.short_description = 'Текст'
