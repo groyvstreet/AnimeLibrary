@@ -4,18 +4,43 @@ from django.db import models
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=150)
+    name = models.CharField('Название', max_length=100, help_text='Введите название жанра')
 
-
-class Comment(models.Model):
-    text = models.CharField(max_length=1000)
+    def __str__(self):
+        return self.name
 
 
 class Anime(models.Model):
-    title = models.CharField('Название', max_length=150)
-    description = models.CharField('Описание', max_length=1000, blank=True)
-    episodes_number = models.IntegerField('Эпизоды', default=0)
-    episode_duration = models.IntegerField('Длительность эпизода', default=0)
-    date = models.DateField()
+    title = models.CharField('Название', max_length=100)
     genre = models.ManyToManyField(Genre)
+    date = models.DateField('Дата выхода', help_text='Введите дату выхода аниме')
+    episodes_number = models.IntegerField('Эпизоды', default=0, help_text='Введите количество эпизодов')
+    episode_duration = models.IntegerField('Длительность эпизода', default=0,
+                                           help_text='Введите длительность эпизода, мин.')
     rating = models.FloatField('Рейтинг', default=0)
+    description = models.TextField('Описание', max_length=100000, blank=True, help_text='Введите описание')
+
+    STATUS = (
+        ('i', 'Выходит'),
+        ('o', 'Вышло'),
+    )
+
+    status = models.CharField('Статус', max_length=1, choices=STATUS, default='i')
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return self.title
+
+
+class Comment(models.Model):
+    date = models.DateTimeField('Время', null=True, auto_now_add=True)
+    text = models.TextField(max_length=100000, help_text='Введите комментарий')
+    anime = models.ForeignKey(Anime, on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return self.text
