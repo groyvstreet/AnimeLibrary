@@ -3,13 +3,23 @@
 {% block title %}<title>{{ anime.title }}</title>{% endblock %}
 
 {% block content %}
-  <h1>{{ anime.title }}</h1>
+    <h1>{{ anime.title }}</h1>
 
-  <p><strong>Жанр:</strong> {{ anime.display_genre }}</p>
-  <p><strong>Дата выхода:</strong> {{ anime.date }}</p>
-  <p><strong>Статус:</strong> {{ anime.status }}</p>
-  <p><strong>Эпизоды:</strong> {{ anime.episodes_number }}</p>
-  <p><strong>Длительность эпизода:</strong> {{ anime.episode_duration }}</p>
-  <p><strong>Рейтинг:</strong> {{ anime.rating }}</p>
-  <p><strong>Описание:</strong> {{ anime.description }}</p>
+    <p><strong>Жанр:</strong> {{ anime.display_genre }}</p>
+    <p><strong>Дата выхода:</strong> {{ anime.date }}</p>
+    <p><strong>Статус:</strong><strong class="{% if anime.status == 'o' %}text-success{% else %}text-warning{% endif %}"> {{ anime.get_status_display }}</strong></p>
+    <p><strong>Эпизоды:</strong> {{ anime.episodes_number }}</p>
+    <p><strong>Длительность эпизода:</strong> {{ anime.episode_duration }}</p>
+    <p><strong>Рейтинг:</strong> {{ anime.rating }}</p>
+    <p><strong>Описание:</strong> {{ anime.description }}</p>
+    <div style="margin-left:20px;margin-top:20px">
+        <h4>Отзывы</h4>
+
+        {% for comment in anime.comment_set.all %}
+        <hr>
+        <p><strong>Время:</strong> {{ comment.date }}</p>
+        <p><a href=""><strong>{{ comment.user }}</strong></a></p>
+        <p>{{ comment.text }}</p>
+        {% endfor %}
+    </div>
 {% endblock %}
