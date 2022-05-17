@@ -3,8 +3,8 @@
 {% block title %}<title>Вход</title>{% endblock %}
 
 {% block content %}
-<div class="card border-success">
-    <div class="card-header bg-transparent border-success"><strong class="text-success">Вход</strong></div>
+<div class="card border-success mt-5" style="border-radius: 30px;">
+    <div class="card-header bg-transparent border-success d-flex justify-content-center"><strong class="text-success">Вход</strong></div>
     <div class="card-body text-success">
         {% if form.errors %}
         <p>Имя пользователя и пароль не совпадают. Попробуйте ещё раз.</p>
@@ -39,10 +39,10 @@
         </form>
     </div>
     <div class="card-footer bg-transparent border-success">
-        <div class="row">
+        <div class="col">
             <a href="{% url 'password_reset' %}" class="text-danger">Забыли пароль?</a>
         </div>
-        <div class="row">
+        <div class="col">
             <a href="" class="text-warning">Регистрация</a>
         </div>
     </div>
