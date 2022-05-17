@@ -1,4 +1,6 @@
 from django.db import models
+from django.urls import reverse
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -45,11 +47,15 @@ class Anime(models.Model):
 
     display_description.short_description = 'Описание'
 
+    def get_absolute_url(self):
+        return reverse('anime_detail', args=(self.id,))
+
 
 class Comment(models.Model):
     date = models.DateTimeField('Время', null=True, auto_now_add=True)
     text = models.TextField('Текст',  max_length=100000, help_text='Введите комментарий')
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         ordering = ['-date']

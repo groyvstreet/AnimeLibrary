@@ -25,7 +25,7 @@ class GenreAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'date', 'display_text', 'anime')
+    list_display = ('id', 'date', 'display_text', 'user', 'anime')
     list_display_links = ('id', 'display_text')
     search_fields = ('id', 'text')
     list_filter = ('date', 'anime')

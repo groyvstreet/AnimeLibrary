@@ -1,3 +1,4 @@
+import django.conf.urls.i18n
 from django.urls import path
 from . import views
 from rest_framework import routers
@@ -16,4 +17,8 @@ from .api import CommentViewSet
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('animes/', views.AnimeListView.as_view(), name='animes'),
+    path('animes/<int:pk>/', views.AnimeDetailView.as_view(), name='anime_detail'),
+    #path('users/', views.UserListView.as_view(), name='users'),
+    #path('users/<int:pk>/', views.UserDetailView.as_view(), name='user_detail'),
 ]
