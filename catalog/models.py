@@ -8,6 +8,9 @@ from django.contrib.auth.models import User
 class Genre(models.Model):
     name = models.CharField('Название', max_length=100, help_text='Введите название жанра')
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 

@@ -15,7 +15,7 @@
     <div style="margin-left:20px;margin-top:20px">
         <h4>Отзывы</h4>
         <hr>
-        <form method="post" action="{% url 'comment' anime.id %}">
+        <form action="{% url 'comment' anime.id %}" method="post">
             {% csrf_token %}
             <textarea class="form-control mb-1" type="text" required name="comment" placeholder="Введите комментарий"></textarea>
             <input type="hidden" name="user_id" value="{{ user.id }}">
