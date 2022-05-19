@@ -19,10 +19,16 @@ from django.urls import include
 from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework import routers
+
+from catalog import api
+
+router = routers.DefaultRouter()
+router.register(r'animes', api.AnimeViewSet, 'animes')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('frontend/', include('frontend.urls')),
     path('', include('catalog.urls')),
-    path('users/', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('api/', include(router.urls)),
 ]

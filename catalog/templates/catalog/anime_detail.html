@@ -14,7 +14,13 @@
     <p><strong>Описание:</strong> {{ anime.description }}</p>
     <div style="margin-left:20px;margin-top:20px">
         <h4>Отзывы</h4>
-
+        <hr>
+        <form action="{% url 'comment' anime.id %}" method="post">
+            {% csrf_token %}
+            <textarea class="form-control mb-1" type="text" required name="comment" placeholder="Введите комментарий"></textarea>
+            <input type="hidden" name="user_id" value="{{ user.id }}">
+            <button class="btn btn-outline-success" type="submit">Отправить</button>
+        </form>
         {% for comment in anime.comment_set.all %}
         <hr>
         <p><strong>Время:</strong> {{ comment.date }}</p>
