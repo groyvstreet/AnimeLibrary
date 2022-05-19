@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.template.defaulttags import url
 from django.views import generic
 from .models import Anime
 from .models import Genre
@@ -110,4 +111,10 @@ class FilterAnimesView(FilterAttributes, generic.ListView):
             kwargs["rating__in"] = self.request.GET.getlist("rating")
         if self.request.GET.getlist("status"):
             kwargs["status__in"] = self.request.GET.getlist("status")
-        return Anime.objects.filter(**kwargs)
+        queryset = Anime.objects.filter(**kwargs)
+        if self.request.GET.getlist("sorting"):
+            if self.request.GET.getlist("sorting")[0] == 'rating':
+                queryset = queryset.order_by('-rating')
+            elif self.request.GET.getlist("sorting")[0] == 'date':
+                queryset = queryset.order_by('-date')
+        return queryset

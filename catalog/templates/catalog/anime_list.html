@@ -28,71 +28,94 @@
         </div>
     </div>
     <form action="{% url 'animes_filter' %}" method="get">
-        <div class="card mb-1">
-            <div class="card-header">Жанр</div>
-            <div class="card-body">
-                {% for genre in view.get_genres %}
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="genre" value="{{ genre.id }}">
-                    <label class="form-check-label">{{ genre.name }}</label>
+        <div class="row">
+            <div class="col">
+                <div class="card mb-1">
+                    <div class="card-header">Статус</div>
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="status" value="o">
+                            <label class="form-check-label">Вышло</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="status" value="i">
+                            <label class="form-check-label">Выходит</label>
+                        </div>
+                    </div>
                 </div>
-                {% endfor %}
+                <div class="card mb-1">
+                    <div class="card-header">Жанр</div>
+                    <div class="card-body">
+                        {% for genre in view.get_genres %}
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="genre" value="{{ genre.id }}">
+                            <label class="form-check-label">{{ genre.name }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card mb-1">
+                    <div class="card-header">Год</div>
+                    <div class="card-body">
+                        {% for date in view.get_dates %}
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="date" value="{{ date }}">
+                            <label class="form-check-label">{{ date }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card mb-1">
+                    <div class="card-header">Рейтинг</div>
+                    <div class="card-body">
+                        {% for rating in view.get_ratings %}
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="rating" value="{{ rating }}">
+                            <label class="form-check-label">{{ rating }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="card mb-1">
-            <div class="card-header">Год</div>
-            <div class="card-body">
-                {% for date in view.get_dates %}
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="date" value="{{ date.year }}">
-                    <label class="form-check-label">{{ date.year }}</label>
+            <div class="col">
+                <div class="card mb-1">
+                    <div class="card-header">Эпизоды</div>
+                    <div class="card-body">
+                        {% for episodes_number in view.get_ep_num %}
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="episodes_number"
+                                   value="{{ episodes_number }}">
+                            <label class="form-check-label">{{ episodes_number }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="card mb-1">
-            <div class="card-header">Эпизоды</div>
-            <div class="card-body">
-                {% for episodes_number in view.get_ep_num %}
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="episodes_number" value="{{ episodes_number }}">
-                    <label class="form-check-label">{{ episodes_number }}</label>
+                <div class="card mb-1">
+                    <div class="card-header">Длительность эпизода</div>
+                    <div class="card-body">
+                        {% for episode_duration in view.get_ep_duration %}
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="episode_duration"
+                                   value="{{ episode_duration }}">
+                            <label class="form-check-label">{{ episode_duration }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="card mb-1">
-            <div class="card-header">Длительность эпизода</div>
-            <div class="card-body">
-                {% for episode_duration in view.get_ep_duration %}
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="episode_duration" value="{{ episode_duration }}">
-                    <label class="form-check-label">{{ episode_duration }}</label>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="card mb-1">
-            <div class="card-header">Рейтинг</div>
-            <div class="card-body">
-                {% for rating in view.get_ratings %}
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="rating" value="{{ rating }}">
-                    <label class="form-check-label">{{ rating }}</label>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="card mb-1">
-            <div class="card-header">Статус</div>
-            <div class="card-body">
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="status" value="o">
-                    <label class="form-check-label">Вышло</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="status" value="i">
-                    <label class="form-check-label">Выходит</label>
+                <div class="card mb-1">
+                    <div class="card-header">Сортировка по</div>
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="sorting"
+                                   value="rating">
+                            <label class="form-check-label">Рейтингу</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="sorting"
+                                   value="date">
+                            <label class="form-check-label">Году</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
