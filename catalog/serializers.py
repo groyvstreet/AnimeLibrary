@@ -7,7 +7,7 @@ from .models import Comment
 class AnimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Anime
-        fields = '__all__'
+        fields = ('title', 'genre', 'date', 'episodes_number', 'episode_duration', 'description', 'status')
 
 
 class GenreSerializer(serializers.ModelSerializer):
