@@ -5,4 +5,9 @@ export default class AnimesService {
         const response = await axios.get('http://127.0.0.1:8000/api/animes/')
         return response.data
     }
+
+    static async getById(id) {
+        const response = await axios.get(`http://127.0.0.1:8000/api/animes/${id}/`)
+        return response.data
+    }
 }

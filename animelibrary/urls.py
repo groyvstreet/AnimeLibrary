@@ -25,6 +25,7 @@ from catalog import api
 
 router = routers.DefaultRouter()
 router.register(r'animes', api.AnimeViewSet, 'animes')
+router.register(r'genres', api.GenreViewSet, 'genres')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

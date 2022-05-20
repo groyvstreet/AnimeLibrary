@@ -1,13 +1,16 @@
 import logo from "./logo.svg";
 import {Link} from "react-router-dom";
+import {useState} from "react";
 
 function Layout() {
+    const [active, setActive] = useState(0)
+
     return (
-        <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-            <a className="navbar-brand" href="#">
+        <nav className="navbar navbar-expand-sm navbar-light sticky-top">
+            {/*<a className="navbar-brand" href="#">
                 <img className="App-logo" src={logo} alt=""/>
                 Kraken
-            </a>
+            </a>*/}
             <button className="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,13 +18,13 @@ function Layout() {
             </button>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav mr-auto">
-                    <li className="nav-item">
+                    <li className={active === 0 ? 'nav-item active' : 'nav-item'} onClick={() => {setActive(0)}}>
                         <Link className="nav-link" to="/">Главная</Link>
                     </li>
-                    <li className="nav-item">
+                    <li className={active === 1 ? 'nav-item active' : 'nav-item'} onClick={() => {setActive(1)}}>
                         <Link className="nav-link" to="/animes">Аниме</Link>
                     </li>
-                    <li className="nav-item">
+                    <li className={active === 2 ? 'nav-item active' : 'nav-item'} onClick={() => {setActive(2)}}>
                         <Link className="nav-link" to="/about">Пользователи</Link>
                     </li>
                 </ul>
