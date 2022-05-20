@@ -5,10 +5,8 @@ export const useLoading = (callback) => {
 
     const load = async () => {
         setIsLoading(true)
-        setTimeout(async () => {
-            await callback()
-            setIsLoading(false)
-        }, 2000)
+        await callback()
+        setIsLoading(false)
     }
 
     return [load, isLoading]

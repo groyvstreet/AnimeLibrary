@@ -1,7 +1,13 @@
+import logo from "./logo.svg";
+import {Link} from "react-router-dom";
+
 function Layout() {
     return (
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-            <a className="navbar-brand" href="#">Kraken</a>
+            <a className="navbar-brand" href="#">
+                <img className="App-logo" src={logo} alt=""/>
+                Kraken
+            </a>
             <button className="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,13 +16,13 @@ function Layout() {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
-                        <a className="nav-link" href="">Главная</a>
+                        <Link className="nav-link" to="/">Главная</Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="">Аниме</a>
+                        <Link className="nav-link" to="/animes">Аниме</Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="#">Пользователи</a>
+                        <Link className="nav-link" to="/about">Пользователи</Link>
                     </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">
