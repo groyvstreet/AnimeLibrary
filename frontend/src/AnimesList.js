@@ -1,7 +1,4 @@
-import axios from "axios";
-import {useState} from "react";
 import AnimeItem from "./components/AnimeItem";
-import logo from "./logo.svg";
 
 function AnimesList({animes}) {
     if (!animes.length) {

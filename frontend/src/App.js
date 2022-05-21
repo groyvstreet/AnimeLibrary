@@ -2,14 +2,22 @@ import './App.css';
 import {BrowserRouter} from "react-router-dom";
 import Layout from "./Layout";
 import Router from "./components/Router";
+import {AuthContext} from "./context";
+import {useState} from "react";
 
 function App() {
+    const [isAuth, setIsAuth] = useState(false)
 
     return (
-        <BrowserRouter>
-            <Layout/>
-            <Router/>
-        </BrowserRouter>
+        <AuthContext.Provider value={{
+            isAuth,
+            setIsAuth
+        }}>
+            <BrowserRouter>
+                <Layout/>
+                <Router/>
+            </BrowserRouter>
+        </AuthContext.Provider>
     )
 }
 

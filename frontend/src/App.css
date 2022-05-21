@@ -50,11 +50,3 @@
     transition: margin-top 1000ms;
     box-shadow: 0 10px 90px rgba(0, 0, 0, 0.4);
 }
-
-.navbar {
-    background: lightseagreen;
-}
-
-.active {
-    background: yellow;
-}
