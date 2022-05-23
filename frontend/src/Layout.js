@@ -2,10 +2,34 @@ import logo from "./logo.svg";
 import {Link} from "react-router-dom";
 import {useContext, useState} from "react";
 import {AuthContext} from "./context";
+import axios from "axios";
 
 function Layout() {
     const {isAuth, setIsAuth} = useContext(AuthContext)
     const [active, setActive] = useState(0)
+
+    const logout = (event) => {
+        event.preventDefault()
+        const token = localStorage.getItem('token')
+        axios.defaults.headers = {
+            Authorization: 'Token ' + token,
+        }
+        axios.post('http://127.0.0.1:8000/api/token/logout', token)
+            .then(response => {
+                console.log(response)
+                // if (response.status === 200) {
+                //     localStorage.setItem('token', response.data.key)
+                //     setIsAuth(true)
+                // } else {
+                //     throw Error(`Something went wrong: code ${response.status}`)
+                // }
+                localStorage.removeItem('token')
+            })
+            .catch(error => {
+                console.log(error)
+                setIsAuth(false)
+            })
+    }
 
     return (
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
@@ -48,19 +72,19 @@ function Layout() {
                                 <a className="dropdown-item" href="#">Профиль</a>
                                 <a className="dropdown-item" href="#">Личный список</a>
                                 <div className="dropdown-divider"></div>
-                                <a className="dropdown-item" href="#">Выход</a>
+                                <a className="dropdown-item" onClick={logout}>Выход</a>
                             </div>
                         </li>
                         :
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Регистрация</a>
+                            <Link className="nav-link" to="/signup">Регистрация</Link>
                         </li>}
                     {isAuth
                         ?
                         <div></div>
                         :
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Вход</a>
+                            <Link className="nav-link" to="/login">Вход</Link>
                         </li>
                     }
                 </ul>

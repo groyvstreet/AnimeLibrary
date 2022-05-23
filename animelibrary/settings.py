@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'rest_framework',
     'corsheaders',
+    'rest_framework.authtoken',
+    'djoser',
 ]
 
 MIDDLEWARE = [

@@ -40,13 +40,11 @@
 }
 
 .anime-card:hover {
-    border: solid lightseagreen;
     cursor: pointer;
-    transform-origin: left top;
+    transform-origin: top;
     margin-top: -10px;
-    margin-left: 10px;
-    margin-right: 10px;
-    transition: margin-left 1000ms;
+    margin-left: -10px;
+    margin-right: -10px;
     transition: margin-top 1000ms;
     box-shadow: 0 10px 90px rgba(0, 0, 0, 0.4);
 }

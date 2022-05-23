@@ -1,6 +1,12 @@
+from django.contrib.auth import authenticate
 from django.shortcuts import render
 from django.template.defaulttags import url
 from django.views import generic
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from .serializers import UserSerializer, IssueTokenRequestSerializer, TokenSerializer
+from rest_framework.request import Request
+from rest_framework.response import Response
 from .models import Anime
 from .models import Genre
 from .models import Comment
@@ -9,6 +15,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import datetime
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.authentication import TokenAuthentication
+
 
 # Create your views here.
 
@@ -22,6 +31,7 @@ def index(request):
 
 class FilterAttributes:
     """View for filters"""
+
     @staticmethod
     def get_genres():
         return Genre.objects.all()
@@ -118,3 +128,27 @@ class FilterAnimesView(FilterAttributes, generic.ListView):
             elif self.request.GET.getlist("sorting")[0] == 'date':
                 queryset = queryset.order_by('-date')
         return queryset
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
+def user(request: Request):
+    return Response({
+        'data': UserSerializer(request.user).data
+    })
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def issue_token(request: Request):
+    serializer = IssueTokenRequestSerializer(data=request.data)
+    if serializer.is_valid():
+        authenticated_user = authenticate(**serializer.validated_data)
+        try:
+            token = Token.objects.get(user=authenticated_user)
+        except Token.DoesNotExist:
+            token = Token.objects.create(user=authenticated_user)
+        return Response(TokenSerializer(token).data)
+    else:
+        return Response(serializer.errors, status=400)
