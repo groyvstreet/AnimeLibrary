@@ -1,22 +1,26 @@
-import axios from "axios";
-import {useState} from "react";
 import AnimeItem from "./components/AnimeItem";
 
 function AnimesList({animes}) {
-    async function animesList() {
-        const response = await axios.get('http://127.0.0.1:8000/api/animes/')
-        console.log(response.data)
+    if (!animes.length) {
+        return (
+            <div>
+                <h5>
+                    Не найдено
+                </h5>
+                <div style={{paddingLeft: '180px'}}>
+                    <img src="https://vkclub.su/_data/stickers/persik/sticker_vk_persik_017.png" alt=""/>
+                </div>
+            </div>
+        )
     }
 
     return (
-        <div>
-            <button onClick={animesList}>GET</button>
-            <h1>Аниме</h1>
+        <div className="row">
             {animes.map((anime) =>
                 <AnimeItem anime={anime} key={anime.id}/>
             )}
         </div>
-    );
+    )
 }
 
 export default AnimesList
