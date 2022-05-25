@@ -1,5 +1,5 @@
 import {useParams} from "react-router-dom";
-import {Component, useEffect, useState} from "react";
+import {Component, useContext, useEffect, useState} from "react";
 import {useLoading} from "../hooks/useLoading";
 import AnimesService from "../API/AnimesService";
 import Loader from "../components/Loader";
@@ -8,18 +8,29 @@ import AnimesFilter from "../components/AnimesFilter";
 import React from "react";
 import CommentsService from "../API/CommentsService";
 import CommentItem from "../components/CommentItem";
+import {AuthContext} from "../context";
+import GenresService from "../API/GenresService";
 
 function Anime() {
+    const {isAuth, user} = useContext(AuthContext)
     const params = useParams()
     const [anime, setAnime] = useState({})
     const [comments, setComments] = useState([])
     const [text, setText] = useState('')
     const [id, setId] = useState(0)
+    const [genres, setGenres] = useState('')
 
     const [loadAnime, isAnimeLoading] = useLoading(async () => {
         const anime = await AnimesService.getById(params.id)
         setAnime(anime)
         setId(anime.id)
+        let temp_genres = await GenresService.getAll()
+        temp_genres = temp_genres.filter((genre) => anime.genre.indexOf(genre.id) !== -1)
+        let temp = ''
+        for (let i = 0; i < temp_genres.length; i++) {
+            temp +=  ', ' + temp_genres[i].name
+        }
+        setGenres(temp.slice(2))
         const comments = await CommentsService.getAll()
         setComments(comments.filter((comment) => comment.anime == params.id))
     })
@@ -30,13 +41,20 @@ function Anime() {
 
     const addComment = (e) => {
         e.preventDefault()
-        const newComment = {
-            text,
-            anime: id,
-        }
-        setComments([newComment, ...comments])
         setText('')
-        CommentsService.post(newComment)
+        if (isAuth) {
+            const newComment = {
+                user: user.id,
+                text,
+                anime: id,
+            }
+            setComments([newComment, ...comments])
+            const token = localStorage.getItem('token')
+            CommentsService.post(newComment, token)
+            loadAnime()
+        } else {
+            window.location.replace('http://localhost:3000/login')
+        }
     }
 
     return (
@@ -55,15 +73,14 @@ function Anime() {
                     </div>
                     <div className="row">
                         <div className="col-sm-8 col-sm-offset-1" style={{padding: '0px'}}>
-                            <div className="card mb-2">
+                            <div className="card border-light mb-2" style={{boxShadow: '5px 10px 20px rgba(0,0,0,0.3), -5px -10px 20px rgba(255,255,255,0.5)'}}>
                                 <div className="row card-body">
                                     <div className="col-sm-4">
-                                        <img src="https://dere.shikimori.one/system/animes/original/5114.jpg?1644323535"
-                                             alt=""/>
+                                        <img src={anime.image} alt=""/>
                                     </div>
                                     <div className="col-sm-4">
-                                        <p><strong>Жанр: </strong>{anime.genre}</p>
-                                        <p><strong>Год выхода: </strong>{anime.date}</p>
+                                        <p><strong>Жанр: </strong>{genres}</p>
+                                        <p><strong>Год выхода: </strong>{new Date(anime.date).toLocaleDateString()}</p>
                                         <p><strong>Статус: </strong><strong
                                             className={anime.status === 'i' ? 'text-warning' : 'text-success'}>{anime.status === 'i' ? 'Выходит' : 'Вышло'}
                                         </strong>
@@ -77,7 +94,7 @@ function Anime() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="card">
+                            <div className="card border-light">
                                 <div className="card-body">
                                     <h2>Описание</h2>
                                     {anime.description}

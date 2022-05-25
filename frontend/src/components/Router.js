@@ -1,10 +1,14 @@
 import {Navigate, Route, Routes} from "react-router-dom";
 import Animes from "../pages/Animes";
 import Anime from "../pages/Anime";
+import Login from "../pages/Login";
+import Signup from "../pages/Signup";
+import Profile from "../pages/Profile";
+import Users from "../pages/Users";
 
 const Router = () => {
     return (
-        <div>
+        <div className="App-header">
             <Routes>
                 <Route path="*" element={<Navigate to="/"/>}>
                 </Route>
@@ -14,7 +18,13 @@ const Router = () => {
                 </Route>
                 <Route path="/animes/:id" element={<Anime/>}>
                 </Route>
-                <Route path="/about" element={<h1>ABOUT</h1>}>
+                <Route path="/users" element={<Users/>}>
+                </Route>
+                <Route path="/login" element={<Login/>}>
+                </Route>
+                <Route path="/signup" element={<Signup/>}>
+                </Route>
+                <Route path="/:slug" element={<Profile/>}>
                 </Route>
             </Routes>
         </div>

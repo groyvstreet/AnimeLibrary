@@ -1,14 +1,27 @@
 import logo from "./logo.svg";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useContext, useState} from "react";
 import {AuthContext} from "./context";
+import axios from "axios";
+import UsersService from "./API/UsersService";
 
 function Layout() {
-    const {isAuth, setIsAuth} = useContext(AuthContext)
+    const navigate = useNavigate();
+    const {isAuth, setIsAuth, user} = useContext(AuthContext)
     const [active, setActive] = useState(0)
 
+    const logout = (event) => {
+        event.preventDefault()
+        const token = localStorage.getItem('token')
+        UsersService.logout(token).then(() => {
+            localStorage.removeItem('token')
+            setIsAuth(false)
+            //window.location.replace('http://localhost:3000/');
+        })
+    }
+
     return (
-        <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+        <nav className="navbar navbar-expand-sm navbar-light bg-light sticky-top" style={{background: 'radial-gradient(at top, #FEFFFF, #A7CECC)'}}>
             {/*<a className="navbar-brand" href="#">
                 <img className="App-logo" src={logo} alt=""/>
                 Kraken
@@ -33,7 +46,7 @@ function Layout() {
                     <li className={active === 2 ? 'nav-item active' : 'nav-item'} onClick={() => {
                         setActive(2)
                     }}>
-                        <Link className="nav-link" to="/about">Пользователи</Link>
+                        <Link className="nav-link" to="/users">Пользователи</Link>
                     </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">
@@ -42,25 +55,25 @@ function Layout() {
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                user
+                                {user.username}
                             </a>
                             <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a className="dropdown-item" href="#">Профиль</a>
+                                <div className="dropdown-item" onClick={() => navigate(`/${user.username}`)}>Профиль</div>
                                 <a className="dropdown-item" href="#">Личный список</a>
                                 <div className="dropdown-divider"></div>
-                                <a className="dropdown-item" href="#">Выход</a>
+                                <a className="dropdown-item" onClick={logout}>Выход</a>
                             </div>
                         </li>
                         :
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Регистрация</a>
+                            <Link className="nav-link" to="/signup">Регистрация</Link>
                         </li>}
                     {isAuth
                         ?
                         <div></div>
                         :
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Вход</a>
+                            <Link className="nav-link" to="/login">Вход</Link>
                         </li>
                     }
                 </ul>

@@ -1,12 +1,16 @@
 import axios from "axios";
 
-export default class GenresService {
+export default class CommentsService {
     static async getAll() {
         const response = await axios.get('http://127.0.0.1:8000/api/comments/')
         return response.data
     }
 
-    static async post(data) {
+    static async post(data, token) {
+        axios.defaults.headers = {
+            "Content-Type": "application/json",
+            Authorization: "Token " + token
+        }
         const response = await axios.post('http://127.0.0.1:8000/api/comments/', data)
         return response.data
     }

@@ -8,8 +8,7 @@ const AnimeItem = ({anime}) => {
     return (
         <div className="col-sm-3">
             <div className="card mb-2 anime-card" onClick={() => navigate(`/animes/${anime.id}`)}>
-                <img className="card-img-top"
-                     src="https://dere.shikimori.one/system/animes/original/5114.jpg?1644323535" alt=""/>
+                <img className="card-img-top" src={anime.image} style={{height: '230px'}} alt=""/>
                 <div className="card-header">
                     <div>
                         <strong className="text-success">{anime.title}</strong>

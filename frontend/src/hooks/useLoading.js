@@ -7,6 +7,7 @@ export const useLoading = (callback) => {
         setIsLoading(true)
         await callback()
         setIsLoading(false)
+
     }
 
     return [load, isLoading]

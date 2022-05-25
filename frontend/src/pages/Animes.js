@@ -13,10 +13,10 @@ import GenresService from "../API/GenresService";
 function Animes() {
     const [animes, setAnimes] = useState([])
     const [genres, setGenres] = useState([])
+    const [filter, setFilter] = useState({sort: 'rating', query: '', genre: '', status: ''})
 
-    const [filter, setFilter] = useState({sort: 'rating', query: '', genre: []})
     const [loadAnimes, isAnimesLoading] = useLoading(async () => {
-        const animes = await AnimesService.getAll()
+        const animes = await AnimesService.get(filter.genre, filter.status)
         setAnimes(animes)
     })
 
@@ -40,9 +40,9 @@ function Animes() {
         return sortedAnimes.filter((anime) => anime.title.toLowerCase().includes(filter.query))
     }, [filter.query, sortedAnimes])
 
-    const animesWithGenres = useMemo(() => {
-        return sortedAndSearchedAnimes.filter((anime) => anime.genre.toString().toLowerCase().includes(filter.genre))
-    }, [filter.genre, sortedAndSearchedAnimes])
+    useEffect(() => {
+        loadAnimes()
+    }, [filter.genre, filter.status])
 
     return (
         <div className="container">
@@ -54,8 +54,17 @@ function Animes() {
             <div className="row">
                 <div className="col-sm-8 col-sm-offset-1" style={{padding: '0px'}}>
                     {isAnimesLoading
-                        ? <Loader/>
-                        : <AnimesList animes={animesWithGenres}/>
+                        ?
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <Loader/>
+                        </div>
+                        :
+                        <AnimesList animes={sortedAndSearchedAnimes}/>
                     }
                 </div>
                 <div className="col-sm-4">

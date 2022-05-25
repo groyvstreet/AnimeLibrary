@@ -24,6 +24,8 @@ class Anime(models.Model):
                                            help_text='Введите длительность эпизода, мин.')
     rating = models.FloatField('Рейтинг', default=0)
     description = models.TextField('Описание', max_length=100000, blank=True, help_text='Введите описание')
+    image = models.CharField('Источник изображения', max_length=1000, blank=True)
+    user = models.ManyToManyField(User)
 
     STATUS = (
         ('i', 'Выходит'),
