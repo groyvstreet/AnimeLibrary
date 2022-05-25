@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {useContext} from "react";
 import {AuthContext} from "../context";
 import axios from "axios";
+import UsersService from "../API/UsersService";
 
 function Login() {
     const {isAuth, setIsAuth} = useContext(AuthContext)
@@ -10,21 +11,13 @@ function Login() {
 
     const login = (event) => {
         event.preventDefault()
-        axios.post('http://127.0.0.1:8000/api/token/login', {
-            username: username,
-            password: password,
-        })
+        UsersService.login(username, password)
             .then(response => {
-                if (response.status === 200) {
-                    localStorage.setItem('token', response.data.auth_token)
-                    setIsAuth(true)
-                } else {
-                    throw Error(`Something went wrong: code ${response.status}`)
-                }
+                return response.json()
             })
-            .catch(error => {
-                console.log(error)
-                setIsAuth(false)
+            .then((data) => {
+                localStorage.setItem('token', data.auth_token)
+                setIsAuth(true)
             })
     }
 

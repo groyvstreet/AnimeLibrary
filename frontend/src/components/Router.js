@@ -3,10 +3,11 @@ import Animes from "../pages/Animes";
 import Anime from "../pages/Anime";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
+import Profile from "../pages/Profile";
 
 const Router = () => {
     return (
-        <div>
+        <div className="App-header">
             <Routes>
                 <Route path="*" element={<Navigate to="/"/>}>
                 </Route>
@@ -21,6 +22,8 @@ const Router = () => {
                 <Route path="/login" element={<Login/>}>
                 </Route>
                 <Route path="/signup" element={<Signup/>}>
+                </Route>
+                <Route path="/:slug" element={<Profile/>}>
                 </Route>
             </Routes>
         </div>

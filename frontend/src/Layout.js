@@ -1,38 +1,27 @@
 import logo from "./logo.svg";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useContext, useState} from "react";
 import {AuthContext} from "./context";
 import axios from "axios";
+import UsersService from "./API/UsersService";
 
 function Layout() {
-    const {isAuth, setIsAuth} = useContext(AuthContext)
+    const navigate = useNavigate();
+    const {isAuth, setIsAuth, user} = useContext(AuthContext)
     const [active, setActive] = useState(0)
 
     const logout = (event) => {
         event.preventDefault()
         const token = localStorage.getItem('token')
-        axios.defaults.headers = {
-            Authorization: 'Token ' + token,
-        }
-        axios.post('http://127.0.0.1:8000/api/token/logout', token)
-            .then(response => {
-                console.log(response)
-                // if (response.status === 200) {
-                //     localStorage.setItem('token', response.data.key)
-                //     setIsAuth(true)
-                // } else {
-                //     throw Error(`Something went wrong: code ${response.status}`)
-                // }
-                localStorage.removeItem('token')
-            })
-            .catch(error => {
-                console.log(error)
-                setIsAuth(false)
-            })
+        UsersService.logout(token).then(() => {
+            localStorage.removeItem('token')
+            setIsAuth(false)
+            //window.location.replace('http://localhost:3000/');
+        })
     }
 
     return (
-        <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+        <nav className="navbar navbar-expand-sm navbar-light bg-light sticky-top" style={{background: 'radial-gradient(at top, #FEFFFF, #A7CECC)'}}>
             {/*<a className="navbar-brand" href="#">
                 <img className="App-logo" src={logo} alt=""/>
                 Kraken
@@ -66,10 +55,10 @@ function Layout() {
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                user
+                                {user.username}
                             </a>
                             <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a className="dropdown-item" href="#">Профиль</a>
+                                <div className="dropdown-item" onClick={() => navigate(`/${user.username}`)}>Профиль</div>
                                 <a className="dropdown-item" href="#">Личный список</a>
                                 <div className="dropdown-divider"></div>
                                 <a className="dropdown-item" onClick={logout}>Выход</a>

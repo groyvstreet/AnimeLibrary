@@ -60,6 +60,18 @@ CORS_ORIGIN_WHITELIST = (
     'https://127.0.0.1:3000',
 )
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
+DJOSER = {
+    'SERIALIZERS': {
+        'user': 'catalog.serializers.UserSerializer',
+    },
+}
+
 ROOT_URLCONF = 'animelibrary.urls'
 
 TEMPLATES = [

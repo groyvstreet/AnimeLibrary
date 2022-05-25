@@ -5,25 +5,28 @@ import Router from "./components/Router";
 import {AuthContext} from "./context";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import UsersService from "./API/UsersService";
 
 function App() {
-    const [isAuth, setIsAuth] = useState(true)
+    const [isAuth, setIsAuth] = useState(false)
+    const [user, setUser] = useState({})
 
     useEffect(() => {
         const token = localStorage.getItem('token')
-        axios.defaults.headers = {
-            "Content-Type": "application/json",
-            Authorization: "Token " + token
-        }
-        axios.get('http://127.0.0.1:8000/api/user')
+        UsersService.getAuth(token)
             .then(response => {
-                if (response.status !== 200) {
-                    throw Error(`Something went wrong: code ${response.status}`)
+                if (response.ok) {
+                    setIsAuth(true)
+                } else {
+                    setIsAuth(false)
                 }
+                return response.json()
             })
-            .catch(error => {
-                console.log(error)
-                setIsAuth(false)
+            .then((data) => {
+                setUser(data[0])
+                if (!isAuth) {
+                    setUser({username: ''})
+                }
             })
 
     }, [isAuth])
@@ -31,7 +34,9 @@ function App() {
     return (
         <AuthContext.Provider value={{
             isAuth,
-            setIsAuth
+            setIsAuth,
+            user,
+            setUser
         }}>
             <BrowserRouter>
                 <Layout/>
