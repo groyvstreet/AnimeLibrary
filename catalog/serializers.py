@@ -18,10 +18,16 @@ class GenreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CurrentUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'id', 'username', 'first_name', 'last_name']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name']
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -30,16 +36,3 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
-
-
-class IssueTokenRequestSerializer(serializers.Serializer):
-    model = User
-
-    username = serializers.CharField(required=True)
-    password = serializers.CharField(required=True)
-
-
-class TokenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Token
-        fields = ['key']

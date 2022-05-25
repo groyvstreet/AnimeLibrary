@@ -5,6 +5,12 @@ import UsersService from "../API/UsersService";
 import {useLoading} from "../hooks/useLoading";
 import AnimesService from "../API/AnimesService";
 import Loader from "../components/Loader";
+import AnimesFilter from "../components/AnimesFilter";
+import GenresService from "../API/GenresService";
+import {useMemo} from "react";
+import AnimeItem from "../components/AnimeItem";
+import AnimeTile from "../components/AnimeTile";
+import {isUndefined} from "axios/lib/utils";
 
 function Profile() {
     const {isAuth, user} = useContext(AuthContext)
@@ -15,9 +21,12 @@ function Profile() {
     const [isDisable, setIsDisable] = useState(true)
     const username = window.location.pathname.slice(1)
     const [profileUser, setProfileUser] = useState({})
+    const [animes, setAnimes] = useState([])
+    const [genres, setGenres] = useState([])
+    const [filter, setFilter] = useState({sort: 'rating', query: '', genre: '', status: ''})
 
     const [loadProfile, isProfileLoading] = useLoading(async () => {
-        const users = await UsersService.getAll(window.location.pathname.slice(1))
+        const users = await UsersService.getAll()
         const user = users.filter((user) => user.username == username)[0]
         setProfileUser(user)
         setFirstName(user.first_name)
@@ -26,8 +35,38 @@ function Profile() {
         setInitLastName(user.last_name)
     })
 
-    useEffect( () => {
+    const [loadGenres, isGenresLoading] = useLoading(async () => {
+        const genres = await GenresService.getAll()
+        setGenres(genres)
+    })
+
+    const [loadAnimes, isAnimesLoading] = useLoading(async () => {
+        const animes = await UsersService.getAnimes(profileUser.id, filter.genre, filter.status)
+        setAnimes(animes)
+    })
+
+    const sortedAnimes = useMemo(() => {
+        return [...animes].sort((a, b) =>
+            a[filter.sort].toString().localeCompare(b[filter.sort].toString())
+        ).reverse()
+    }, [filter.sort, animes])
+
+    const sortedAndSearchedAnimes = useMemo(() => {
+        return sortedAnimes.filter((anime) => anime.title.toLowerCase().includes(filter.query))
+    }, [filter.query, sortedAnimes])
+
+    useEffect(() => {
+        if (!isUndefined(profileUser.id)) {
+            loadAnimes()
+        }
+    }, [filter.genre, filter.status, profileUser])
+
+    useEffect(() => {
         loadProfile()
+        if (!isUndefined(profileUser.id)) {
+            loadAnimes()
+        }
+        loadGenres()
     }, [])
 
     useEffect(() => {
@@ -40,8 +79,7 @@ function Profile() {
 
     const update = (e) => {
         e.preventDefault()
-        UsersService.update(user.id, {
-            username: user.username,
+        UsersService.update({
             first_name: firstName,
             last_name: lastName
         }, localStorage.getItem('token'))
@@ -58,7 +96,7 @@ function Profile() {
                         ?
                         <Loader/>
                         :
-                        <div className="card text-center mt-5" style={{borderRadius: '30px'}}>
+                        <div className="card text-center mt-5 mb-5" style={{borderRadius: '30px'}}>
                             <div className="card-header bg-transparent">
                                 <strong className="text-success">
                                     Профиль
@@ -124,6 +162,24 @@ function Profile() {
                             }
                         </div>
                     }
+                </div>
+            </div>
+            <hr/>
+            <div className="row">
+                <div className="col-sm-12 col-sm-offset-1" style={{padding: '0px'}}>
+                    <h1>
+                        Аниме
+                    </h1>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-sm-8 col-sm-offset-1" style={{padding: '0px'}}>
+                    {sortedAndSearchedAnimes.map((anime) =>
+                        <AnimeTile anime={anime} key={anime.id}/>
+                    )}
+                </div>
+                <div className="col-sm-4">
+                    <AnimesFilter filter={filter} setFilter={setFilter} genres={genres}/>
                 </div>
             </div>
         </div>

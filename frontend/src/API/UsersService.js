@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default class UsersService {
     static async getAuth(token) {
-        const response = await fetch('http://localhost:8000/api/users/', {
+        const response = await fetch('http://localhost:8000/api/users/me', {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -38,21 +38,20 @@ export default class UsersService {
     }
 
     static async getById(id) {
-        const response = await fetch('http://localhost:8000/api/usernames/' + id, {
+        const response = await fetch('http://localhost:8000/api/users/' + id, {
             method: 'GET',
         })
         return response
     }
 
-    static async update(id, data, token) {
-        const response = await fetch('http://localhost:8000/api/usernames/' + id + '/', {
-            method: 'PUT',
+    static async update(data, token) {
+        const response = await fetch('http://localhost:8000/api/users/me/', {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
                 Authorization: "Token " + token
             },
             body: JSON.stringify({
-                username: data.username,
                 first_name: data.first_name,
                 last_name: data.last_name
             })
@@ -61,7 +60,12 @@ export default class UsersService {
     }
 
     static async getAll() {
-        const response = await axios.get('http://localhost:8000/api/usernames')
+        const response = await axios.get('http://localhost:8000/api/users')
+        return response.data
+    }
+
+    static async getAnimes(id, genres, status) {
+        const response = await axios.get(`http://127.0.0.1:8000/api/users/${id}/animes`)
         return response.data
     }
 }

@@ -50,3 +50,10 @@
     transition: margin-top 1000ms;
     box-shadow: 0 10px 90px rgba(0, 0, 0, 0.4);
 }
+
+.user-card:hover {
+    cursor: pointer;
+    margin-left: -10px;
+    margin-right: -10px;
+    box-shadow: 0 10px 90px rgba(0, 0, 0, 0.4);
+}

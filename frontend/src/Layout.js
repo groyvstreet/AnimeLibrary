@@ -46,7 +46,7 @@ function Layout() {
                     <li className={active === 2 ? 'nav-item active' : 'nav-item'} onClick={() => {
                         setActive(2)
                     }}>
-                        <Link className="nav-link" to="/about">Пользователи</Link>
+                        <Link className="nav-link" to="/users">Пользователи</Link>
                     </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">

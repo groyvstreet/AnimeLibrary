@@ -51,6 +51,7 @@ function Anime() {
             setComments([newComment, ...comments])
             const token = localStorage.getItem('token')
             CommentsService.post(newComment, token)
+            loadAnime()
         } else {
             window.location.replace('http://localhost:3000/login')
         }

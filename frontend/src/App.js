@@ -23,7 +23,7 @@ function App() {
                 return response.json()
             })
             .then((data) => {
-                setUser(data[0])
+                setUser(data)
                 if (!isAuth) {
                     setUser({username: ''})
                 }

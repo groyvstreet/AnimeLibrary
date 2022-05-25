@@ -4,9 +4,11 @@ function Signup() {
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [checkPassword, setCheckPassword] = useState('')
 
     const signup = (event) => {
         event.preventDefault()
+
     }
 
     return (
@@ -30,6 +32,9 @@ function Signup() {
                                 <input className="form-control mb-3" value={password}
                                        onChange={e => setPassword(e.target.value)}
                                        placeholder="Введите пароль"/>
+                                <input className="form-control mb-3" value={checkPassword}
+                                       onChange={e => setCheckPassword(e.target.value)}
+                                       placeholder="Подтвердите пароль"/>
                                 <button className="btn btn-outline-success" onClick={signup}>
                                     Регистрация
                                 </button>

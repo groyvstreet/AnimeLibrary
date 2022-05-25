@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import UsersService from "../API/UsersService";
+import {Link} from "react-router-dom";
 
 const CommentItem = ({comment}) => {
     const [username, setUsername] = useState('')
@@ -18,7 +19,7 @@ const CommentItem = ({comment}) => {
         <div>
             <hr/>
             <p><strong>Время:</strong> {new Date(comment.date).toLocaleString()}</p>
-            <p><a href="#"><strong>{username}</strong></a></p>
+            <p><Link to={'/' + username}><strong>{username}</strong></Link></p>
             <p>{comment.text}</p>
         </div>
     )

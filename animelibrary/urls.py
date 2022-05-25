@@ -32,10 +32,11 @@ router.register(r'usernames', api.UserViewSet, 'usernames')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('catalog.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    # path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include(router.urls)),
-    path('api/user/', views.user, name='user'),
+    # path('api/user/', views.user, name='user'),
     path('api/', include('djoser.urls')),
     path('api/', include('djoser.urls.authtoken')),
+    path('api/users/<int:pk>/animes/', api.UserAnimesView.as_view()),
     # path('api/login/', views.issue_token, name='login'),
 ]

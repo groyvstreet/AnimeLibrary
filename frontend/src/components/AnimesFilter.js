@@ -21,9 +21,16 @@ const AnimesFilter = ({filter, setFilter, genres}) => {
                 ]}
             />
             <SortCheckBoxSelect
+                name="Жанр"
                 value={filter.genre}
                 options={genres}
-                onChanged={selectedGenre => setFilter({...filter, genre: selectedGenre})}
+                onChanged={(selectedGenres) => setFilter({...filter, genre: selectedGenres})}
+            />
+            <SortCheckBoxSelect
+                name="Статус"
+                value={filter.status}
+                options={[{id: 1, name: 'i'}, {id: 2, name: 'o'}]}
+                onChanged={(selectedStatus) => setFilter({...filter, status: selectedStatus})}
             />
         </div>
     )
