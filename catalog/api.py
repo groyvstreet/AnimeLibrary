@@ -1,13 +1,13 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets, permissions, views
-from .models import Anime
+from rest_framework import viewsets, permissions, views, generics
+from .models import Anime, Rating
 from .models import Genre
 from .models import Comment
-from .serializers import AnimeSerializer, UserSerializer
+from .serializers import AnimeSerializer, UserSerializer, RatingSerializer
 from .serializers import GenreSerializer
 from .serializers import CommentSerializer
 from django_filters.rest_framework import DjangoFilterBackend
-from .service import AnimeFilter
+from .service import AnimeFilter, RatingFilter
 from rest_framework.response import Response
 
 
@@ -71,4 +71,28 @@ class UserAnimesView(views.APIView):
         anime = Anime.objects.filter(id=request.data['anime'])[0]
         anime.user.add(pk)
         serializer = AnimeSerializer(Anime.objects.filter(user__id=pk), many=True)
+        return Response(serializer.data)
+
+
+class RatingView(generics.ListAPIView):
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = RatingFilter
+    queryset = Rating.objects.all().distinct()
+    serializer_class = RatingSerializer
+
+    def post(self, request):
+        anime = Anime.objects.get(id=request.data['anime'])
+        user = User.objects.get(id=request.data['user'])
+        Rating.objects.update_or_create(
+            anime=anime, user=user,
+            defaults={'number': request.data['value']}
+        )
+        ratings = Rating.objects.filter(anime=anime)
+        average = 0
+        for rating in ratings:
+            average += rating.number
+        average /= len(ratings)
+        anime.average_rating = round(average, 2)
+        anime.save()
+        serializer = RatingSerializer(Rating.objects.all(), many=True)
         return Response(serializer.data)

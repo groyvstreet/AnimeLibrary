@@ -23,7 +23,7 @@ function Profile() {
     const [profileUser, setProfileUser] = useState({})
     const [animes, setAnimes] = useState([])
     const [genres, setGenres] = useState([])
-    const [filter, setFilter] = useState({sort: 'rating', query: '', genre: '', status: ''})
+    const [filter, setFilter] = useState({sort: 'average_rating', query: '', genre: '', status: ''})
 
     const [loadProfile, isProfileLoading] = useLoading(async () => {
         const users = await UsersService.getAll()
@@ -41,7 +41,7 @@ function Profile() {
     })
 
     const [loadAnimes, isAnimesLoading] = useLoading(async () => {
-        const animes = await UsersService.getAnimes(profileUser.id, filter.genre, filter.status)
+        const animes = await AnimesService.get(filter.genre, filter.status, user.username)
         setAnimes(animes)
     })
 

@@ -13,7 +13,7 @@ import GenresService from "../API/GenresService";
 function Animes() {
     const [animes, setAnimes] = useState([])
     const [genres, setGenres] = useState([])
-    const [filter, setFilter] = useState({sort: 'rating', query: '', genre: '', status: ''})
+    const [filter, setFilter] = useState({sort: 'average_rating', query: '', genre: '', status: ''})
 
     const [loadAnimes, isAnimesLoading] = useLoading(async () => {
         const animes = await AnimesService.get(filter.genre, filter.status)

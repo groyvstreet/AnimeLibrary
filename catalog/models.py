@@ -22,7 +22,7 @@ class Anime(models.Model):
     episodes_number = models.IntegerField('Эпизоды', default=0, help_text='Введите количество эпизодов')
     episode_duration = models.IntegerField('Длительность эпизода', default=0,
                                            help_text='Введите длительность эпизода, мин.')
-    rating = models.FloatField('Рейтинг', default=0)
+    average_rating = models.FloatField('Рейтинг', default=0)
     description = models.TextField('Описание', max_length=100000, blank=True, help_text='Введите описание')
     image = models.CharField('Источник изображения', max_length=1000, blank=True)
     user = models.ManyToManyField(User)
@@ -73,3 +73,12 @@ class Comment(models.Model):
         return self.text[:120] + '...'
 
     display_text.short_description = 'Текст'
+
+
+class Rating(models.Model):
+    number = models.IntegerField('Рейтинг', default=0, help_text='Введите число')
+    anime = models.ForeignKey(Anime, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return str(self.number)

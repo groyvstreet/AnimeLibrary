@@ -1,11 +1,34 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {useContext} from "react";
+import {AuthContext} from "../context";
+import CommentsService from "../API/CommentsService";
+import {useParams} from "react-router-dom";
+import RatingsService from "../API/RatingsService";
 
-const Star = () => {
+const StarItem = ({value, rating, loadAnime}) => {
+    const {isAuth, user} = useContext(AuthContext)
+    const params = useParams()
+
+    const setRating = () => {
+        if (isAuth) {
+            const rating = {
+                user: user.id,
+                anime: params.id,
+                value: value,
+            }
+            const token = localStorage.getItem('token')
+            RatingsService.post(rating, token)
+            loadAnime()
+        } else {
+            window.location.replace('http://localhost:3000/login')
+        }
+    }
+
     return (
         <svg width="32" height="32" viewBox="0 0 32 32">
-            <use href="#star" fill="gray"></use>
+            <use href="#star" fill={value <= rating ? 'green' : 'gray'} onClick={setRating}></use>
         </svg>
     )
 }
 
-export default Star
+export default StarItem

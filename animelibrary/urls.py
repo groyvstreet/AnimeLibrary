@@ -38,5 +38,6 @@ urlpatterns = [
     path('api/', include('djoser.urls')),
     path('api/', include('djoser.urls.authtoken')),
     path('api/users/<int:pk>/animes/', api.UserAnimesView.as_view()),
+    path('api/ratings/', api.RatingView.as_view()),
     # path('api/login/', views.issue_token, name='login'),
 ]

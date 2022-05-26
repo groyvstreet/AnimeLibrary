@@ -11,6 +11,9 @@ import CommentItem from "../components/CommentItem";
 import {AuthContext} from "../context";
 import GenresService from "../API/GenresService";
 import UsersService from "../API/UsersService";
+import StarRating from "../components/StarRating";
+import RatingsService from "../API/RatingsService";
+import {isUndefined} from "axios/lib/utils";
 
 function Anime() {
     const {isAuth, user} = useContext(AuthContext)
@@ -21,6 +24,7 @@ function Anime() {
     const [id, setId] = useState(0)
     const [genres, setGenres] = useState('')
     const [isAdded, setIsAdded] = useState(false)
+    const [rating, setRating] = useState(0.)
 
     const [loadAnime, isAnimeLoading] = useLoading(async () => {
         const anime = await AnimesService.getById(params.id)
@@ -42,12 +46,22 @@ function Anime() {
         setIsAdded(userAnimes.filter((userAnime) => userAnime.id === anime.id).length === 1)
     })
 
+    const [loadRating, isRatingLoading] = useLoading(async () => {
+        const ratings = await RatingsService.get(anime.id, user.id)
+        if (ratings.length) {
+            setRating(ratings[0].number)
+        }
+    })
+
     useEffect(() => {
         loadAnime()
     }, [])
 
     useEffect(() => {
         loadUserAnimes()
+        if (!isUndefined(user.id)) {
+            loadRating()
+        }
     }, [user, anime])
 
     const addComment = (e) => {
@@ -121,9 +135,9 @@ function Anime() {
                                         </p>
                                         <p><strong>Эпизоды: </strong>{anime.episodes_number}</p>
                                         <p><strong>Длительность эпизода: </strong>{anime.episode_duration}</p>
-                                        <p><strong>Рейтинг: </strong>{anime.rating}</p>
+                                        <p><strong>Рейтинг: </strong>{anime.average_rating}</p>
                                     </div>
-                                    <div className="col-sm-4">
+                                    <div className="col-sm-4 text-right">
                                         {!isAdded
                                             ?
                                             <button className="btn btn-success"
@@ -132,6 +146,7 @@ function Anime() {
                                             <button className="btn btn-danger"
                                                     onClick={() => removeFromUser()}>Удалить</button>
                                         }
+                                        <StarRating rating={rating} loadAnime={loadAnime}/>
                                     </div>
                                 </div>
                             </div>
