@@ -10,6 +10,7 @@ import CommentsService from "../API/CommentsService";
 import CommentItem from "../components/CommentItem";
 import {AuthContext} from "../context";
 import GenresService from "../API/GenresService";
+import UsersService from "../API/UsersService";
 
 function Anime() {
     const {isAuth, user} = useContext(AuthContext)
@@ -19,6 +20,7 @@ function Anime() {
     const [text, setText] = useState('')
     const [id, setId] = useState(0)
     const [genres, setGenres] = useState('')
+    const [isAdded, setIsAdded] = useState(false)
 
     const [loadAnime, isAnimeLoading] = useLoading(async () => {
         const anime = await AnimesService.getById(params.id)
@@ -28,16 +30,25 @@ function Anime() {
         temp_genres = temp_genres.filter((genre) => anime.genre.indexOf(genre.id) !== -1)
         let temp = ''
         for (let i = 0; i < temp_genres.length; i++) {
-            temp +=  ', ' + temp_genres[i].name
+            temp += ', ' + temp_genres[i].name
         }
         setGenres(temp.slice(2))
         const comments = await CommentsService.getAll()
         setComments(comments.filter((comment) => comment.anime == params.id))
     })
 
+    const [loadUserAnimes, isUserAnimesLoading] = useLoading(async () => {
+        const userAnimes = await UsersService.getAnimes(user.id, '', '')
+        setIsAdded(userAnimes.filter((userAnime) => userAnime.id === anime.id).length === 1)
+    })
+
     useEffect(() => {
         loadAnime()
     }, [])
+
+    useEffect(() => {
+        loadUserAnimes()
+    }, [user, anime])
 
     const addComment = (e) => {
         e.preventDefault()
@@ -51,6 +62,28 @@ function Anime() {
             setComments([newComment, ...comments])
             const token = localStorage.getItem('token')
             CommentsService.post(newComment, token)
+            loadAnime()
+        } else {
+            window.location.replace('http://localhost:3000/login')
+        }
+    }
+
+    const removeFromUser = () => {
+        if (isAuth) {
+            UsersService.removeAnime(user.id, anime.id, localStorage.getItem('token')).then((response) => {
+                return response.json()
+            })
+            loadAnime()
+        } else {
+            window.location.replace('http://localhost:3000/login')
+        }
+    }
+
+    const addToUser = () => {
+        if (isAuth) {
+            UsersService.addAnime(user.id, anime.id, localStorage.getItem('token')).then((response) => {
+                return response.json()
+            })
             loadAnime()
         } else {
             window.location.replace('http://localhost:3000/login')
@@ -73,7 +106,8 @@ function Anime() {
                     </div>
                     <div className="row">
                         <div className="col-sm-8 col-sm-offset-1" style={{padding: '0px'}}>
-                            <div className="card border-light mb-2" style={{boxShadow: '5px 10px 20px rgba(0,0,0,0.3), -5px -10px 20px rgba(255,255,255,0.5)'}}>
+                            <div className="card border-light mb-2"
+                                 style={{boxShadow: '5px 10px 20px rgba(0,0,0,0.3), -5px -10px 20px rgba(255,255,255,0.5)'}}>
                                 <div className="row card-body">
                                     <div className="col-sm-4">
                                         <img src={anime.image} alt=""/>
@@ -90,7 +124,14 @@ function Anime() {
                                         <p><strong>Рейтинг: </strong>{anime.rating}</p>
                                     </div>
                                     <div className="col-sm-4">
-                                        asd
+                                        {!isAdded
+                                            ?
+                                            <button className="btn btn-success"
+                                                    onClick={() => addToUser()}>Добавить</button>
+                                            :
+                                            <button className="btn btn-danger"
+                                                    onClick={() => removeFromUser()}>Удалить</button>
+                                        }
                                     </div>
                                 </div>
                             </div>
