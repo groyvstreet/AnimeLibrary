@@ -1,14 +1,18 @@
 import React, {useState} from "react";
+import UsersService from "../API/UsersService";
+import {useNavigate} from "react-router-dom";
 
 function Signup() {
-    const [userName, setUserName] = useState('')
-    const [email, setEmail] = useState('')
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [checkPassword, setCheckPassword] = useState('')
+    const navigate = useNavigate();
 
     const signup = (event) => {
         event.preventDefault()
-
+        if (password === checkPassword) {
+            UsersService.signup(username, password).then(() => {navigate('/login')})
+        }
     }
 
     return (
@@ -23,19 +27,16 @@ function Signup() {
                         </div>
                         <div className="card-body">
                             <form>
-                                <input className="form-control mb-3" value={userName}
-                                       onChange={e => setUserName(e.target.value)}
+                                <input className="form-control mb-3" value={username}
+                                       onChange={e => setUsername(e.target.value)}
                                        placeholder="Введите имя пользователя"/>
-                                <input className="form-control mb-3" value={email}
-                                       onChange={e => setEmail(e.target.value)}
-                                       placeholder="Введите почту"/>
                                 <input className="form-control mb-3" value={password}
                                        onChange={e => setPassword(e.target.value)}
                                        placeholder="Введите пароль"/>
                                 <input className="form-control mb-3" value={checkPassword}
                                        onChange={e => setCheckPassword(e.target.value)}
                                        placeholder="Подтвердите пароль"/>
-                                <button className="btn btn-outline-success" onClick={signup}>
+                                <button className="btn btn-success" onClick={signup}>
                                     Регистрация
                                 </button>
                             </form>

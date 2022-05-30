@@ -5,28 +5,30 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Profile from "../pages/Profile";
 import Users from "../pages/Users";
+import {privateRoutes, publicRoutes} from "../router";
+import {useContext} from "react";
+import {AuthContext} from "../context";
 
 const Router = () => {
+    const {isAuth} = useContext(AuthContext)
     return (
         <div className="App-header">
-            <Routes>
-                <Route path="*" element={<Navigate to="/"/>}>
-                </Route>
-                <Route path="/" element={<h1>HOME</h1>}>
-                </Route>
-                <Route path="/animes" element={<Animes/>}>
-                </Route>
-                <Route path="/animes/:id" element={<Anime/>}>
-                </Route>
-                <Route path="/users" element={<Users/>}>
-                </Route>
-                <Route path="/login" element={<Login/>}>
-                </Route>
-                <Route path="/signup" element={<Signup/>}>
-                </Route>
-                <Route path="/:slug" element={<Profile/>}>
-                </Route>
-            </Routes>
+            {isAuth
+                ?
+                <Routes>
+                    <Route path="*" element={<Navigate to="/"/>}></Route>
+                    {privateRoutes.map((route) =>
+                        <Route path={route.path} element={route.component} exact={route.exact}></Route>
+                    )}
+                </Routes>
+                :
+                <Routes>
+                    <Route path="*" element={<Navigate to="/"/>}></Route>
+                    {publicRoutes.map((route) =>
+                        <Route path={route.path} element={route.component} exact={route.exact}></Route>
+                    )}
+                </Routes>
+            }
         </div>
     )
 }

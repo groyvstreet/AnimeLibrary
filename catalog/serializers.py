@@ -1,9 +1,8 @@
 from rest_framework import serializers
-from .models import Anime, Rating
+from .models import Anime, Rating, Status
 from .models import Genre
 from .models import Comment
 from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
 
 
 class AnimeSerializer(serializers.ModelSerializer):
@@ -31,8 +30,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    #user = UserSerializer()
-
     class Meta:
         model = Comment
         fields = '__all__'
@@ -42,3 +39,13 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = '__all__'
+
+
+class StatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Status
+        fields = '__all__'
+
+
+class UserAnimesSerializer(serializers.Serializer):
+    anime = serializers.IntegerField()

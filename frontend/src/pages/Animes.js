@@ -3,16 +3,18 @@ import {useEffect, useMemo, useState} from "react";
 import logo from "../logo.svg"
 import {useLoading} from "../hooks/useLoading";
 import AnimesService from "../API/AnimesService";
-import Layout from "../Layout";
+import Layout from "../components/Layout";
 import AnimesFilter from "../components/AnimesFilter";
-import AnimesList from "../AnimesList";
+import AnimesList from "../components/AnimesList";
 import Loader from "../components/Loader";
 import AnimeItem from "../components/AnimeItem";
 import GenresService from "../API/GenresService";
+import StatusesService from "../API/StatusesService";
 
 function Animes() {
     const [animes, setAnimes] = useState([])
     const [genres, setGenres] = useState([])
+    const [statuses, setStatuses] = useState([])
     const [filter, setFilter] = useState({sort: 'average_rating', query: '', genre: '', status: ''})
 
     const [loadAnimes, isAnimesLoading] = useLoading(async () => {
@@ -25,9 +27,15 @@ function Animes() {
         setGenres(genres)
     })
 
+    const [loadStatuses, isStatusesLoading] = useLoading(async () => {
+        const statuses = await StatusesService.getAll()
+        setStatuses(statuses)
+    })
+
     useEffect(() => {
         loadAnimes()
         loadGenres()
+        loadStatuses()
     }, [])
 
     const sortedAnimes = useMemo(() => {
@@ -68,7 +76,7 @@ function Animes() {
                     }
                 </div>
                 <div className="col-sm-4">
-                    <AnimesFilter filter={filter} setFilter={setFilter} genres={genres}/>
+                    <AnimesFilter filter={filter} setFilter={setFilter} genres={genres} statuses={statuses}/>
                 </div>
             </div>
         </div>

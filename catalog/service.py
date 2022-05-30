@@ -8,7 +8,7 @@ class CharFilterInFilter(rest_framework.BaseInFilter, rest_framework.CharFilter)
 
 class AnimeFilter(rest_framework.FilterSet):
     genre = CharFilterInFilter(field_name='genre__name', lookup_expr='in')
-    status = rest_framework.CharFilter(lookup_expr='in')
+    status = CharFilterInFilter(field_name='status__name', lookup_expr='in')
     user = CharFilterInFilter(field_name='user__username', lookup_expr='in')
 
     class Meta:

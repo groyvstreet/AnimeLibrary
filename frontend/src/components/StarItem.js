@@ -14,11 +14,10 @@ const StarItem = ({value, rating, loadAnime}) => {
             const rating = {
                 user: user.id,
                 anime: params.id,
-                value: value,
+                number: value,
             }
             const token = localStorage.getItem('token')
-            RatingsService.post(rating, token)
-            loadAnime()
+            RatingsService.post(rating, token).then(() => loadAnime())
         } else {
             window.location.replace('http://localhost:3000/login')
         }
@@ -26,7 +25,7 @@ const StarItem = ({value, rating, loadAnime}) => {
 
     return (
         <svg width="32" height="32" viewBox="0 0 32 32">
-            <use href="#star" fill={value <= rating ? 'green' : 'gray'} onClick={setRating}></use>
+            <use href="#star" fill={value <= rating ? 'green' : 'gray'} style={{cursor: 'pointer'}} onClick={setRating}></use>
         </svg>
     )
 }

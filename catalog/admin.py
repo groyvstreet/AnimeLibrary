@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Anime, Rating
+from .models import Anime, Rating, Status
 from .models import Genre
 from .models import Comment
 
@@ -39,3 +39,10 @@ class RatingAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'number')
     search_fields = ('id', 'number')
     list_filter = ('number',)
+
+
+@admin.register(Status)
+class StatusAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    list_display_links = ('id', 'name')
+    search_fields = ('id', 'name')

@@ -1,9 +1,9 @@
-import logo from "./logo.svg";
+import logo from "../logo.svg";
 import {Link, useNavigate} from "react-router-dom";
 import {useContext, useState} from "react";
-import {AuthContext} from "./context";
+import {AuthContext} from "../context";
 import axios from "axios";
-import UsersService from "./API/UsersService";
+import UsersService from "../API/UsersService";
 
 function Layout() {
     const navigate = useNavigate();
@@ -22,10 +22,10 @@ function Layout() {
 
     return (
         <nav className="navbar navbar-expand-sm navbar-light bg-light sticky-top" style={{background: 'radial-gradient(at top, #FEFFFF, #A7CECC)'}}>
-            {/*<a className="navbar-brand" href="#">
-                <img className="App-logo" src={logo} alt=""/>
-                Kraken
-            </a>*/}
+            {/*<a className="navbar-brand" href="#">*/}
+            {/*    <img className="App-logo" src={logo} alt=""/>*/}
+            {/*    Kraken*/}
+            {/*</a>*/}
             <button className="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,15 +53,14 @@ function Layout() {
                     {isAuth
                         ?
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            <a className="nav-link dropdown-toggle" href="frontend/src/components/Layout#" id="navbarDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {user.username}
                             </a>
                             <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <div className="dropdown-item" onClick={() => navigate(`/${user.username}`)}>Профиль</div>
-                                <a className="dropdown-item" href="#">Личный список</a>
+                                <Link className="dropdown-item" to={`/${user.username}`}>Профиль</Link>
                                 <div className="dropdown-divider"></div>
-                                <a className="dropdown-item" onClick={logout}>Выход</a>
+                                <a className="dropdown-item" style={{cursor: 'pointer'}} onClick={logout}>Выход</a>
                             </div>
                         </li>
                         :

@@ -1,15 +1,43 @@
+from django.core.validators import URLValidator, MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+
 
 # Create your models here.
 
 
 class Genre(models.Model):
-    name = models.CharField('Название', max_length=100, help_text='Введите название жанра')
+    name = models.CharField('Название', max_length=100, help_text='Введите название жанра', validators=[
+        RegexValidator(
+            regex=r'^([А-ЯЁ]{1}[а-яё]*|[A-Z]{1}[a-z]*)$',
+            message='Некорректный ввод'
+        )
+    ])
 
     class Meta:
         ordering = ['name']
+        indexes = [
+            models.Index(fields=['name'])
+        ]
+
+    def __str__(self):
+        return self.name
+
+
+class Status(models.Model):
+    name = models.CharField('Название', max_length=100, help_text='Введите название жанра', validators=[
+        RegexValidator(
+            regex=r'^([А-ЯЁ]{1}[а-яё]*|[A-Z]{1}[a-z]*)$',
+            message='Некорректный ввод'
+        )
+    ])
+
+    class Meta:
+        ordering = ['name']
+        indexes = [
+            models.Index(fields=['name'])
+        ]
 
     def __str__(self):
         return self.name
@@ -19,23 +47,46 @@ class Anime(models.Model):
     title = models.CharField('Название', max_length=100)
     genre = models.ManyToManyField(Genre)
     date = models.DateField('Дата выхода', help_text='Введите дату выхода аниме')
-    episodes_number = models.IntegerField('Эпизоды', default=0, help_text='Введите количество эпизодов')
-    episode_duration = models.IntegerField('Длительность эпизода', default=0,
-                                           help_text='Введите длительность эпизода, мин.')
-    average_rating = models.FloatField('Рейтинг', default=0)
+    episodes_number = models.IntegerField('Эпизоды', default=1, help_text='Введите количество эпизодов', validators=[
+        MinValueValidator(
+            limit_value=1,
+            message='Минимум 1'
+        )
+    ])
+    episode_duration = models.IntegerField(
+        'Длительность эпизода', default=1,
+        help_text='Введите длительность эпизода, мин.',
+        validators=[
+            MinValueValidator(
+                limit_value=1,
+                message='Минимум 1'
+            )
+        ])
+    average_rating = models.FloatField('Рейтинг', default=0, validators=[
+        MinValueValidator(
+            limit_value=0,
+            message='Минимум 0'
+        ),
+        MaxValueValidator(
+            limit_value=5,
+            message='Максимум 5'
+        )
+    ])
     description = models.TextField('Описание', max_length=100000, blank=True, help_text='Введите описание')
-    image = models.CharField('Источник изображения', max_length=1000, blank=True)
-    user = models.ManyToManyField(User)
-
-    STATUS = (
-        ('i', 'Выходит'),
-        ('o', 'Вышло'),
-    )
-
-    status = models.CharField('Статус', max_length=1, choices=STATUS, default='i')
+    image = models.CharField('Источник изображения', max_length=1000, validators=[
+        URLValidator(
+            message='Введите url ссылку на изображение'
+        )
+    ])
+    user = models.ManyToManyField(User, blank=True)
+    status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         ordering = ['-date']
+        indexes = [
+            models.Index(fields=['title']),
+            models.Index(fields=['status']),
+        ]
 
     def __str__(self):
         return self.title
@@ -52,18 +103,18 @@ class Anime(models.Model):
 
     display_description.short_description = 'Описание'
 
-    def get_absolute_url(self):
-        return reverse('anime_detail', args=(self.id,))
-
 
 class Comment(models.Model):
-    date = models.DateTimeField('Время', null=True, auto_now_add=True)
-    text = models.TextField('Текст',  max_length=100000, help_text='Введите комментарий')
+    date = models.DateTimeField('Время', auto_now_add=True, null=True)
+    text = models.TextField('Текст', max_length=100000, help_text='Введите комментарий')
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         ordering = ['-date']
+        indexes = [
+            models.Index(fields=['anime'])
+        ]
 
     def __str__(self):
         return self.text
@@ -76,9 +127,24 @@ class Comment(models.Model):
 
 
 class Rating(models.Model):
-    number = models.IntegerField('Рейтинг', default=0, help_text='Введите число')
+    number = models.IntegerField('Рейтинг', default=0, help_text='Введите число', validators=[
+        MinValueValidator(
+            limit_value=0,
+            message='Минимум 0'
+        ),
+        MaxValueValidator(
+            limit_value=5,
+            message='Максимум 5'
+        )
+    ])
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['anime']),
+            models.Index(fields=['user']),
+        ]
 
     def __str__(self):
         return str(self.number)

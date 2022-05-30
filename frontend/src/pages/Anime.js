@@ -3,7 +3,7 @@ import {Component, useContext, useEffect, useState} from "react";
 import {useLoading} from "../hooks/useLoading";
 import AnimesService from "../API/AnimesService";
 import Loader from "../components/Loader";
-import AnimesList from "../AnimesList";
+import AnimesList from "../components/AnimesList";
 import AnimesFilter from "../components/AnimesFilter";
 import React from "react";
 import CommentsService from "../API/CommentsService";
@@ -14,6 +14,7 @@ import UsersService from "../API/UsersService";
 import StarRating from "../components/StarRating";
 import RatingsService from "../API/RatingsService";
 import {isUndefined} from "axios/lib/utils";
+import StatusesService from "../API/StatusesService";
 
 function Anime() {
     const {isAuth, user} = useContext(AuthContext)
@@ -25,6 +26,7 @@ function Anime() {
     const [genres, setGenres] = useState('')
     const [isAdded, setIsAdded] = useState(false)
     const [rating, setRating] = useState(0.)
+    const [status, setStatus] = useState({})
 
     const [loadAnime, isAnimeLoading] = useLoading(async () => {
         const anime = await AnimesService.getById(params.id)
@@ -53,6 +55,14 @@ function Anime() {
         }
     })
 
+    const [loadStatus, isStatusLoading] = useLoading(async () => {
+        const status = await StatusesService.getById(anime.status)
+        setStatus({
+            name: status.name,
+            color: status.name === 'Вышло' ? 'text-success' : 'text-warning'
+        })
+    })
+
     useEffect(() => {
         loadAnime()
     }, [])
@@ -61,6 +71,7 @@ function Anime() {
         loadUserAnimes()
         if (!isUndefined(user.id)) {
             loadRating()
+            loadStatus()
         }
     }, [user, anime])
 
@@ -130,7 +141,7 @@ function Anime() {
                                         <p><strong>Жанр: </strong>{genres}</p>
                                         <p><strong>Год выхода: </strong>{new Date(anime.date).toLocaleDateString()}</p>
                                         <p><strong>Статус: </strong><strong
-                                            className={anime.status === 'i' ? 'text-warning' : 'text-success'}>{anime.status === 'i' ? 'Выходит' : 'Вышло'}
+                                            className={status.color}>{status.name}
                                         </strong>
                                         </p>
                                         <p><strong>Эпизоды: </strong>{anime.episodes_number}</p>
@@ -168,7 +179,7 @@ function Anime() {
                                     placeholder="Введите комментарий"
                                 ></textarea>
                                 <input type="hidden" name="user_id" value="{{ user.id }}"/>
-                                <button className="btn btn-outline-success" onClick={addComment}>
+                                <button className="btn btn-success" onClick={addComment}>
                                     Отправить
                                 </button>
                             </form>

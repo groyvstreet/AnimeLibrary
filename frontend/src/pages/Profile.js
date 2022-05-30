@@ -11,6 +11,8 @@ import {useMemo} from "react";
 import AnimeItem from "../components/AnimeItem";
 import AnimeTile from "../components/AnimeTile";
 import {isUndefined} from "axios/lib/utils";
+import {useParams} from "react-router-dom";
+import StatusesService from "../API/StatusesService";
 
 function Profile() {
     const {isAuth, user} = useContext(AuthContext)
@@ -19,15 +21,19 @@ function Profile() {
     const [initFirstName, setInitFirstName] = useState(user.first_name)
     const [initLastName, setInitLastName] = useState(user.last_name)
     const [isDisable, setIsDisable] = useState(true)
-    const username = window.location.pathname.slice(1)
     const [profileUser, setProfileUser] = useState({})
     const [animes, setAnimes] = useState([])
     const [genres, setGenres] = useState([])
+    const [statuses, setStatuses] = useState([])
     const [filter, setFilter] = useState({sort: 'average_rating', query: '', genre: '', status: ''})
+    const params = useParams()
 
     const [loadProfile, isProfileLoading] = useLoading(async () => {
         const users = await UsersService.getAll()
-        const user = users.filter((user) => user.username == username)[0]
+        const user = users.filter((user) => user.username == params.slug)[0]
+        if (isUndefined(user)) {
+            window.location.replace('http://localhost:3000')
+        }
         setProfileUser(user)
         setFirstName(user.first_name)
         setLastName(user.last_name)
@@ -41,8 +47,13 @@ function Profile() {
     })
 
     const [loadAnimes, isAnimesLoading] = useLoading(async () => {
-        const animes = await AnimesService.get(filter.genre, filter.status, user.username)
+        const animes = await AnimesService.get(filter.genre, filter.status, profileUser.username)
         setAnimes(animes)
+    })
+
+    const [loadStatuses, isStatusesLoading] = useLoading(async () => {
+        const statuses = await StatusesService.getAll()
+        setStatuses(statuses)
     })
 
     const sortedAnimes = useMemo(() => {
@@ -67,7 +78,8 @@ function Profile() {
             loadAnimes()
         }
         loadGenres()
-    }, [])
+        loadStatuses()
+    }, [params])
 
     useEffect(() => {
         if (firstName !== initFirstName || lastName !== initLastName) {
@@ -108,7 +120,7 @@ function Profile() {
                                         <input className="form-control" type="text" placeholder={profileUser.username}
                                                readOnly/>
                                     </div>
-                                    {isAuth && username === user.username
+                                    {isAuth && params.slug === user.username
                                         ?
                                         <div>
                                             <div className="row mb-4">Email
@@ -144,15 +156,15 @@ function Profile() {
                                     }
                                 </div>
                             </div>
-                            {isAuth && username === user.username
+                            {isAuth && params.slug === user.username
                                 ?
                                 <div className="card-footer bg-transparent">
                                     <form>
                                         {isDisable
                                             ?
-                                            <button className="btn btn-outline-success" disabled>Сохранить</button>
+                                            <button className="btn btn-success" disabled>Сохранить</button>
                                             :
-                                            <button className="btn btn-outline-success"
+                                            <button className="btn btn-success"
                                                     onClick={update}>Сохранить</button>
                                         }
                                     </form>
@@ -179,7 +191,7 @@ function Profile() {
                     )}
                 </div>
                 <div className="col-sm-4">
-                    <AnimesFilter filter={filter} setFilter={setFilter} genres={genres}/>
+                    <AnimesFilter filter={filter} setFilter={setFilter} genres={genres} statuses={statuses}/>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import AnimeItem from "./components/AnimeItem";
+import AnimeItem from "./AnimeItem";
 
 function AnimesList({animes}) {
     if (animes.length) {
