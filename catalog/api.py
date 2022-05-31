@@ -1,6 +1,9 @@
-from django.contrib.auth.models import User
+from asgiref.sync import sync_to_async
 from rest_framework import viewsets, permissions, views, generics
 from rest_framework.permissions import BasePermission, SAFE_METHODS
+
+from .dao.anime_dao import AnimeDao
+from .dao.rating_dao import RatingDao
 from .models import Anime, Rating, Status
 from .models import Genre
 from .models import Comment
@@ -41,26 +44,25 @@ class UserAnimesView(views.APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, pk):
-        animes = Anime.objects.filter(user__id=pk)
+        animes = AnimeDao.get_user_animes(pk)
         serializer = AnimeSerializer(animes, many=True)
         return Response(serializer.data)
 
     def delete(self, request, pk):
         serializer = UserAnimesSerializer(data=request.data)
         if serializer.is_valid():
-            animes = Anime.objects.filter(user__id=pk)
-            anime = animes.filter(id=request.data['anime'])[0]
-            anime.user.remove(pk)
-            serializer = AnimeSerializer(Anime.objects.filter(user__id=pk), many=True)
+            AnimeDao.delete_user_anime(pk, request.data['anime'])
+            animes = AnimeDao.get_user_animes(pk)
+            serializer = AnimeSerializer(animes, many=True)
             return Response(serializer.data)
         return Response(serializer.errors)
 
     def post(self, request, pk):
         serializer = UserAnimesSerializer(data=request.data)
         if serializer.is_valid():
-            anime = Anime.objects.filter(id=request.data['anime'])[0]
-            anime.user.add(pk)
-            serializer = AnimeSerializer(Anime.objects.filter(user__id=pk), many=True)
+            AnimeDao.add_user_anime(pk, request.data['anime'])
+            animes = AnimeDao.get_user_animes(pk)
+            serializer = AnimeSerializer(animes, many=True)
             return Response(serializer.data)
         return Response(serializer.errors)
 
@@ -75,19 +77,7 @@ class RatingView(generics.ListAPIView):
     def post(self, request):
         serializer = RatingSerializer(data=request.data)
         if serializer.is_valid():
-            anime = Anime.objects.get(id=request.data['anime'])
-            user = User.objects.get(id=request.data['user'])
-            Rating.objects.update_or_create(
-                anime=anime, user=user,
-                defaults={'number': request.data['number']}
-            )
-            ratings = Rating.objects.filter(anime=anime)
-            average = 0
-            for rating in ratings:
-                average += rating.number
-            average /= len(ratings)
-            anime.average_rating = round(average, 2)
-            anime.save()
+            RatingDao.set_user_rating(request.data['user'], request.data['anime'], request.data['number'])
             return Response(serializer.data)
         return Response(serializer.errors)
 

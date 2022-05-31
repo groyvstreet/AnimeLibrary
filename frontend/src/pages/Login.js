@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useContext} from "react";
 import {AuthContext} from "../context";
 import axios from "axios";
@@ -8,16 +8,33 @@ function Login() {
     const {isAuth, setIsAuth} = useContext(AuthContext)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [isBadData, setIsBadData] = useState(false)
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+
+    useEffect(() => {
+        if (username.length === 0 || password.length < 8) {
+            setIsButtonDisabled(true)
+        } else {
+            setIsButtonDisabled(false)
+        }
+    }, [username, password])
 
     const login = (event) => {
         event.preventDefault()
         UsersService.login(username, password)
             .then(response => {
-                return response.json()
+                if (response.status !== 400) {
+                    return response.json()
+                }
+                return {auth_token: 'undefined'}
             })
             .then((data) => {
-                localStorage.setItem('token', data.auth_token)
-                setIsAuth(true)
+                if (data.auth_token !== 'undefined') {
+                    localStorage.setItem('token', data.auth_token)
+                    setIsAuth(true)
+                } else {
+                    setIsBadData(true)
+                }
             })
     }
 
@@ -33,13 +50,14 @@ function Login() {
                         </div>
                         <div className="card-body">
                             <form>
-                                <input className="form-control mb-3" value={username}
+                                {isBadData && <label className="text-danger">Неверные логин или пароль</label>}
+                                <input className="form-control mb-3 is-valid" value={username}
                                        onChange={e => setUsername(e.target.value)}
                                        placeholder="Введите имя пользователя"/>
-                                <input className="form-control mb-3" value={password}
+                                <input className="form-control mb-3 is-valid" value={password}
                                        onChange={e => setPassword(e.target.value)}
                                        placeholder="Введите пароль"/>
-                                <button className="btn btn-success" onClick={login}>
+                                <button className="btn btn-success" onClick={login} disabled={isButtonDisabled}>
                                     Вход
                                 </button>
                             </form>
