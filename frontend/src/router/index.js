@@ -5,6 +5,7 @@ import Users from "../pages/Users";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Profile from "../pages/Profile";
+import Activation from "../pages/Activation";
 
 export const privateRoutes = [
     {path: '/', component: <h1>HOME</h1>, exact: true},
@@ -22,4 +23,5 @@ export const publicRoutes = [
     {path: '/login', component: <Login/>, exact: true},
     {path: '/signup', component: <Signup/>, exact: true},
     {path: '/:slug', component: <Profile/>, exact: true},
+    {path: '/activation/:uid/:token', component: <Activation/>, exact: true},
 ]

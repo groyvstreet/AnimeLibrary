@@ -7,7 +7,7 @@ const AnimesFilter = ({filter, setFilter, genres, statuses}) => {
     return (
         <div>
             <input
-                className="form-control mb-2"
+                className="form-control mb-2 is-valid"
                 placeholder="Поиск"
                 value={filter.query}
                 onChange={e => setFilter({...filter, query: e.target.value.toLowerCase()})}

@@ -1,10 +1,6 @@
 from django.core.validators import URLValidator, MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
-from django.urls import reverse
 from django.contrib.auth.models import User
-
-
-# Create your models here.
 
 
 class Genre(models.Model):

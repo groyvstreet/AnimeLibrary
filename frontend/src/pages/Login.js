@@ -3,6 +3,7 @@ import {useContext} from "react";
 import {AuthContext} from "../context";
 import axios from "axios";
 import UsersService from "../API/UsersService";
+import {useNavigate} from "react-router-dom";
 
 function Login() {
     const {isAuth, setIsAuth} = useContext(AuthContext)
@@ -10,6 +11,7 @@ function Login() {
     const [password, setPassword] = useState('')
     const [isBadData, setIsBadData] = useState(false)
     const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (username.length === 0 || password.length < 8) {
@@ -32,6 +34,7 @@ function Login() {
                 if (data.auth_token !== 'undefined') {
                     localStorage.setItem('token', data.auth_token)
                     setIsAuth(true)
+                    navigate(`/${username}`)
                 } else {
                     setIsBadData(true)
                 }

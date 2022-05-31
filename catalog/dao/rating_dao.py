@@ -12,7 +12,8 @@ class RatingDao:
             anime=anime, user=user,
             defaults={'number': value}
         )
-        ratings = Rating.objects.filter(anime=anime)
+        anime = Anime.objects.get(id=anime_id)
+        ratings = Rating.objects.filter(anime=anime_id)
         average = 0
         for rating in ratings:
             average += rating.number

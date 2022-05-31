@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 from rest_framework import routers
 
 from catalog import api, views
+from catalog.views import activate
 
 router = routers.DefaultRouter()
 router.register(r'animes', api.AnimeViewSet, 'animes')
@@ -40,5 +41,6 @@ urlpatterns = [
     path('api/', include('djoser.urls.authtoken')),
     path('api/users/<int:pk>/animes/', api.UserAnimesView.as_view()),
     path('api/ratings/', api.RatingView.as_view()),
+    path('activation/<uid>/<token>/', activate),
     # path('api/login/', views.issue_token, name='login'),
 ]

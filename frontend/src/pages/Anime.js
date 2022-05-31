@@ -173,7 +173,7 @@ function Anime() {
                             <hr/>
                             <form>
                                 <textarea
-                                    className="form-control mb-1"
+                                    className="form-control mb-1 is-valid"
                                     value={text}
                                     onChange={e => setText(e.target.value)}
                                     placeholder="Введите комментарий"

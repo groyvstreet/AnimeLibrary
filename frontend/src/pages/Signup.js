@@ -6,6 +6,7 @@ import {useEffect} from "react";
 
 function Signup() {
     const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [checkPassword, setCheckPassword] = useState('')
     const navigate = useNavigate();
@@ -14,7 +15,8 @@ function Signup() {
     const [isButtonDisabled, setIsButtonDisabled] = useState(true)
 
     useEffect(() => {
-        if (username.length === 0 || password.length === 0 || checkPassword.length === 0 || password !== checkPassword) {
+        if (username.length === 0 || email.length === 0 || password.length === 0 || checkPassword.length === 0 ||
+            password !== checkPassword) {
             setIsButtonDisabled(true)
         } else {
             setIsButtonDisabled(false)
@@ -24,7 +26,7 @@ function Signup() {
     const signup = (event) => {
         event.preventDefault()
         if (password === checkPassword) {
-            UsersService.signup(username, password)
+            UsersService.signup(username, email, password)
                 .then(response => {
                     return response.json()
                 })
@@ -63,6 +65,9 @@ function Signup() {
                                 <input className="form-control mb-3 is-valid" value={username}
                                        onChange={e => setUsername(e.target.value)}
                                        placeholder="Введите имя пользователя"/>
+                                <input className="form-control mb-3 is-valid" value={email}
+                                       onChange={e => setEmail(e.target.value)}
+                                       placeholder="Введите email"/>
                                 <input className="form-control mb-3 is-valid" value={password}
                                        onChange={e => setPassword(e.target.value)}
                                        placeholder="Введите пароль"/>

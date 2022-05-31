@@ -117,24 +117,24 @@ function Profile() {
                             <div className="ml-4 mr-4">
                                 <div className="card-body">
                                     <div className="row mb-4">Имя пользователя
-                                        <input className="form-control" type="text" placeholder={profileUser.username}
+                                        <input className="form-control is-valid" type="text" placeholder={profileUser.username}
                                                readOnly/>
                                     </div>
                                     {isAuth && params.slug === user.username
                                         ?
                                         <div>
                                             <div className="row mb-4">Email
-                                                <input className="form-control" type="text" placeholder={user.email}
+                                                <input className="form-control is-valid" type="text" placeholder={user.email}
                                                        readOnly/>
                                             </div>
                                             <div className="row mb-4">Имя
-                                                <input className="form-control" type="text" value={firstName}
+                                                <input className="form-control is-valid" type="text" value={firstName}
                                                        onChange={(e) => {
                                                            setFirstName(e.target.value)
                                                        }}/>
                                             </div>
                                             <div className="row">Фамилия
-                                                <input className="form-control" type="text" value={lastName}
+                                                <input className="form-control is-valid" type="text" value={lastName}
                                                        onChange={(e) => {
                                                            setLastName(e.target.value)
                                                        }}/>
@@ -143,12 +143,12 @@ function Profile() {
                                         :
                                         <div>
                                             <div className="row mb-4">Имя
-                                                <input className="form-control" type="text"
+                                                <input className="form-control is-valid" type="text"
                                                        placeholder={profileUser.first_name}
                                                        readOnly/>
                                             </div>
                                             <div className="row mb-4">Фамилия
-                                                <input className="form-control" type="text"
+                                                <input className="form-control is-valid" type="text"
                                                        placeholder={profileUser.last_name}
                                                        readOnly/>
                                             </div>
