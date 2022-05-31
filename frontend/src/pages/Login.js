@@ -39,7 +39,7 @@ function Login() {
                                 <input className="form-control mb-3" value={password}
                                        onChange={e => setPassword(e.target.value)}
                                        placeholder="Введите пароль"/>
-                                <button className="btn btn-outline-success" onClick={login}>
+                                <button className="btn btn-success" onClick={login}>
                                     Вход
                                 </button>
                             </form>

@@ -68,4 +68,46 @@ export default class UsersService {
         const response = await axios.get(`http://127.0.0.1:8000/api/users/${id}/animes`)
         return response.data
     }
+
+    static async removeAnime(userId, animeId, token) {
+        const response = await fetch(`http://127.0.0.1:8000/api/users/${userId}/animes`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                Authorization: "Token " + token
+            },
+            body: JSON.stringify({
+                anime: animeId,
+            })
+        })
+        return response
+    }
+
+    static async addAnime(userId, animeId, token) {
+        const response = await fetch(`http://127.0.0.1:8000/api/users/${userId}/animes/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                Authorization: "Token " + token
+            },
+            body: JSON.stringify({
+                anime: animeId,
+            })
+        })
+        return response
+    }
+
+    static async signup(username, password) {
+        const response = await fetch('http://localhost:8000/api/users/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify({
+                username,
+                password,
+            })
+        })
+        return response
+    }
 }

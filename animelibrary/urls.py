@@ -27,7 +27,8 @@ router = routers.DefaultRouter()
 router.register(r'animes', api.AnimeViewSet, 'animes')
 router.register(r'genres', api.GenreViewSet, 'genres')
 router.register(r'comments', api.CommentViewSet, 'comments')
-router.register(r'usernames', api.UserViewSet, 'usernames')
+# router.register(r'usernames', api.UserViewSet, 'usernames')
+router.register(r'statuses', api.StatusViewSet, 'statuses')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,5 +39,6 @@ urlpatterns = [
     path('api/', include('djoser.urls')),
     path('api/', include('djoser.urls.authtoken')),
     path('api/users/<int:pk>/animes/', api.UserAnimesView.as_view()),
+    path('api/ratings/', api.RatingView.as_view()),
     # path('api/login/', views.issue_token, name='login'),
 ]

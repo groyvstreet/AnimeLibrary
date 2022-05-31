@@ -1,6 +1,6 @@
 import './App.css';
 import {BrowserRouter} from "react-router-dom";
-import Layout from "./Layout";
+import Layout from "./components/Layout";
 import Router from "./components/Router";
 import {AuthContext} from "./context";
 import {useEffect, useState} from "react";

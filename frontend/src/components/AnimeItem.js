@@ -14,7 +14,7 @@ const AnimeItem = ({anime}) => {
                         <strong className="text-success">{anime.title}</strong>
                     </div>
                     <div style={{fontSize: '12px'}}>{anime.date.slice(0, 4)}</div>
-                    <div style={{fontSize: '12px'}}>Рейтинг: {anime.rating}</div>
+                    <div style={{fontSize: '12px'}}>Рейтинг: {anime.average_rating}</div>
                 </div>
             </div>
         </div>
