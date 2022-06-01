@@ -8,7 +8,6 @@ import Profile from "../pages/Profile";
 import Activation from "../pages/Activation";
 
 export const privateRoutes = [
-    {path: '/', component: <h1>HOME</h1>, exact: true},
     {path: '/animes', component: <Animes/>, exact: true},
     {path: '/animes/:id', component: <Anime/>, exact: true},
     {path: '/users', component: <Users/>, exact: true},
@@ -16,7 +15,6 @@ export const privateRoutes = [
 ]
 
 export const publicRoutes = [
-    {path: '/', component: <h1>HOME</h1>, exact: true},
     {path: '/animes', component: <Animes/>, exact: true},
     {path: '/animes/:id', component: <Anime/>, exact: true},
     {path: '/users', component: <Users/>, exact: true},

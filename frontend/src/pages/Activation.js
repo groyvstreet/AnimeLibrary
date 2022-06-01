@@ -9,14 +9,14 @@ function Activation() {
     useEffect(() => {
         UsersService.activate(params.uid, params.token)
             .then((response) => {
-                if (response.status === 200) {
+                if (response.status !== 400) {
                     setIsActivated(true)
                 }
             })
     }, [])
 
     return (
-        <div>
+        <div className="text-center">
             {isActivated ? 'Вы зарегистрированы!' : 'Что-то пошло не так.'}
         </div>
     )

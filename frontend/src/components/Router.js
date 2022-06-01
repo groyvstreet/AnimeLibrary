@@ -16,14 +16,14 @@ const Router = () => {
             {isAuth
                 ?
                 <Routes>
-                    <Route path="*" element={<Navigate to="/"/>}></Route>
+                    <Route path="*" element={<Navigate to="/animes"/>}></Route>
                     {privateRoutes.map((route) =>
                         <Route path={route.path} element={route.component} exact={route.exact}></Route>
                     )}
                 </Routes>
                 :
                 <Routes>
-                    <Route path="*" element={<Navigate to="/"/>}></Route>
+                    <Route path="*" element={<Navigate to="/animes"/>}></Route>
                     {publicRoutes.map((route) =>
                         <Route path={route.path} element={route.component} exact={route.exact}></Route>
                     )}

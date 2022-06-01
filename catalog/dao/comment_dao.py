@@ -1,7 +1,4 @@
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
-
-import animelibrary.settings
 from catalog.models import Comment, Anime
 from catalog.tasks import send
 

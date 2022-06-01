@@ -99,6 +99,25 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'logs.log'
+        }
+    },
+    'loggers': {
+        'catalog': {
+            'handlers': ['file'],
+            'propagate': True,
+            'level': 'INFO',
+        }
+    }
+}
+
 ROOT_URLCONF = 'animelibrary.urls'
 
 TEMPLATES = [

@@ -13,6 +13,7 @@ function Signup() {
     const [usernameErrors, setUsernameErrors] = useState([])
     const [passwordErrors, setPasswordErrors] = useState([])
     const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+    const [isSended, setIsSended] = useState(false)
 
     useEffect(() => {
         if (username.length === 0 || email.length === 0 || password.length === 0 || checkPassword.length === 0 ||
@@ -38,7 +39,11 @@ function Signup() {
                         setPasswordErrors(data.password)
                         setUsernameErrors([])
                     } else {
-                        navigate('/login')
+                        setIsSended(true)
+                        setUsername('')
+                        setEmail('')
+                        setPassword('')
+                        setCheckPassword('')
                     }
                 })
         }
@@ -48,6 +53,7 @@ function Signup() {
         <div className="container">
             <div className="row justify-content-center">
                 <div className="col-sm-6">
+                    {isSended && <div className="text-center">На вашу почту было отправлено письмо для завершения регистрации.</div>}
                     <div className="card text-center mt-5" style={{borderRadius: '30px'}}>
                         <div className="card-header bg-transparent">
                             <strong className="text-success">
