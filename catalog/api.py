@@ -3,6 +3,7 @@ from rest_framework import viewsets, permissions, views, generics
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 from .dao.anime_dao import AnimeDao
+from .dao.comment_dao import CommentDao
 from .dao.rating_dao import RatingDao
 from .models import Anime, Rating, Status
 from .models import Genre
@@ -34,10 +35,17 @@ class GenreViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAdminUser | ReadOnly]
 
 
-class CommentViewSet(viewsets.ModelViewSet):
+class CommentView(generics.ListAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def post(self, request):
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            CommentDao.create(request.data['user'], request.data['anime'], request.data['text'])
+            return Response(serializer.data)
+        return Response(serializer.errors)
 
 
 class UserAnimesView(views.APIView):

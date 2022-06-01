@@ -1,5 +1,9 @@
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django_filters import rest_framework
-from catalog.models import Anime, Rating
+
+import animelibrary.settings
+from catalog.models import Anime, Rating, Comment
 
 
 class CharFilterInFilter(rest_framework.BaseInFilter, rest_framework.CharFilter):
@@ -23,3 +27,17 @@ class RatingFilter(rest_framework.FilterSet):
     class Meta:
         model = Rating
         fields = ['anime', 'user']
+
+
+def send(username, anime_id, anime_title):
+    comments = Comment.objects.filter(anime=anime_id)
+    emails = set()
+    for comment in comments:
+        user = User.objects.get(id=comment.user_id)
+        emails.add(user.email)
+    send_mail(
+        'Новый комментарий',
+        f'Пользователь "{username}" оставил отзыв к аниме "{anime_title}".',
+        animelibrary.settings.EMAIL_HOST_USER,
+        emails,
+        fail_silently=False)
