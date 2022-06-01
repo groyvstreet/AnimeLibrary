@@ -61,6 +61,12 @@ CORS_ORIGIN_WHITELIST = (
     'https://127.0.0.1:3000',
 )
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'kraken.django.sender@gmail.com'
+EMAIL_HOST_PASSWORD = 'password_for_django'
+EMAIL_PORT = 587
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -71,6 +77,8 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
+    'ACTIVATION_URL': 'activation/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
     'HIDE_USERS': False,
     'SERIALIZERS': {
         'user': 'catalog.serializers.UserSerializer',
@@ -80,6 +88,40 @@ DJOSER = {
         'user_list': ['rest_framework.permissions.AllowAny'],
         'user': ['rest_framework.permissions.AllowAny'],
         'current_user': ['rest_framework.permissions.CurrentUserOrAdmin'],
+    }
+}
+
+REDIS_HOST = '0.0.0.0'
+REDIS_PORT = '6379'
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'custom_formatter': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{'
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'logs.log',
+            'formatter': 'custom_formatter'
+        }
+    },
+    'loggers': {
+        'catalog': {
+            'handlers': ['file'],
+            'propagate': True,
+            'level': 'INFO',
+        }
     }
 }
 

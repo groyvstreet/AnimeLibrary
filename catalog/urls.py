@@ -4,7 +4,6 @@ from . import views
 from rest_framework import routers
 from .api import AnimeViewSet
 from .api import GenreViewSet
-from .api import CommentViewSet
 
 
 # router = routers.DefaultRouter()

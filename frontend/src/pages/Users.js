@@ -36,7 +36,7 @@ function Users() {
                 :
                 <div>
                     <input
-                        className="form-control mt-2 mb-4"
+                        className="form-control mt-2 mb-4 is-valid"
                         placeholder="Поиск"
                         value={filter.query}
                         onChange={e => setFilter({...filter, query: e.target.value})}

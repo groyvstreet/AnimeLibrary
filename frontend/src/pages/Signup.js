@@ -6,15 +6,18 @@ import {useEffect} from "react";
 
 function Signup() {
     const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [checkPassword, setCheckPassword] = useState('')
     const navigate = useNavigate();
     const [usernameErrors, setUsernameErrors] = useState([])
     const [passwordErrors, setPasswordErrors] = useState([])
     const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+    const [isSended, setIsSended] = useState(false)
 
     useEffect(() => {
-        if (username.length === 0 || password.length === 0 || checkPassword.length === 0 || password !== checkPassword) {
+        if (username.length === 0 || email.length === 0 || password.length === 0 || checkPassword.length === 0 ||
+            password !== checkPassword) {
             setIsButtonDisabled(true)
         } else {
             setIsButtonDisabled(false)
@@ -24,7 +27,7 @@ function Signup() {
     const signup = (event) => {
         event.preventDefault()
         if (password === checkPassword) {
-            UsersService.signup(username, password)
+            UsersService.signup(username, email, password)
                 .then(response => {
                     return response.json()
                 })
@@ -36,7 +39,11 @@ function Signup() {
                         setPasswordErrors(data.password)
                         setUsernameErrors([])
                     } else {
-                        navigate('/login')
+                        setIsSended(true)
+                        setUsername('')
+                        setEmail('')
+                        setPassword('')
+                        setCheckPassword('')
                     }
                 })
         }
@@ -46,6 +53,7 @@ function Signup() {
         <div className="container">
             <div className="row justify-content-center">
                 <div className="col-sm-6">
+                    {isSended && <div className="text-center">На вашу почту было отправлено письмо для завершения регистрации.</div>}
                     <div className="card text-center mt-5" style={{borderRadius: '30px'}}>
                         <div className="card-header bg-transparent">
                             <strong className="text-success">
@@ -63,6 +71,9 @@ function Signup() {
                                 <input className="form-control mb-3 is-valid" value={username}
                                        onChange={e => setUsername(e.target.value)}
                                        placeholder="Введите имя пользователя"/>
+                                <input className="form-control mb-3 is-valid" value={email}
+                                       onChange={e => setEmail(e.target.value)}
+                                       placeholder="Введите email"/>
                                 <input className="form-control mb-3 is-valid" value={password}
                                        onChange={e => setPassword(e.target.value)}
                                        placeholder="Введите пароль"/>

@@ -97,7 +97,7 @@ export default class UsersService {
         return response
     }
 
-    static async signup(username, password) {
+    static async signup(username, email, password) {
         const response = await fetch('http://localhost:8000/api/users/', {
             method: 'POST',
             headers: {
@@ -105,7 +105,22 @@ export default class UsersService {
             },
             body: JSON.stringify({
                 username,
+                email,
                 password,
+            })
+        })
+        return response
+    }
+
+    static async activate(uid, token) {
+        const response = await fetch('http://localhost:8000/api/users/activation/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify({
+                uid,
+                token,
             })
         })
         return response

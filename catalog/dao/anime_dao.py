@@ -15,3 +15,7 @@ class AnimeDao:
     def add_user_anime(user_id, anime_id):
         anime = Anime.objects.get(id=anime_id)
         anime.user.add(user_id)
+
+    @staticmethod
+    def get_by_id(anime_id):
+        return Anime.objects.get(id=anime_id)
