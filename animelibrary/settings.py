@@ -102,11 +102,18 @@ CELERY_RESULT_SERIALIZER = 'json'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'custom_formatter': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{'
+        }
+    },
     'handlers': {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': 'logs.log'
+            'filename': 'logs.log',
+            'formatter': 'custom_formatter'
         }
     },
     'loggers': {

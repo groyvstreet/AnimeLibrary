@@ -141,3 +141,7 @@ GitHub.sublime-settings
 
 # Node.js #
 node_modules
+
+.env.dev
+
+logs.log
