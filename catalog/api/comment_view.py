@@ -16,7 +16,8 @@ class CommentView(generics.ListAPIView):
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def post(self, request):
+    def post(self, request) -> Response:
+        """Post-request for creating comment by user"""
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             CommentDao.create(request.data['user'], request.data['anime'], request.data['text'])

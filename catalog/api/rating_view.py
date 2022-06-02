@@ -20,7 +20,8 @@ class RatingView(generics.ListAPIView):
     serializer_class = RatingSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def post(self, request):
+    def post(self, request) -> Response:
+        """Post-request for creating rating to anime by user"""
         serializer = RatingSerializer(data=request.data)
         if serializer.is_valid():
             RatingDao.set_user_rating(request.data['user'], request.data['anime'], request.data['number'])

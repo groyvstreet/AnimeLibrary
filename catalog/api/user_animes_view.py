@@ -12,14 +12,16 @@ logger = logging.getLogger(__name__)
 class UserAnimesView(views.APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request, pk):
+    def get(self, request, pk) -> Response:
+        """Get-request, that returns response with json animes list of specific user"""
         animes = AnimeDao.get_user_animes(pk)
         serializer = AnimeSerializer(animes, many=True)
         user = UserDao.get_by_id(pk)
         logger.info(f'USER "{user.username}" ANIMES GETTED')
         return Response(serializer.data)
 
-    def delete(self, request, pk):
+    def delete(self, request, pk) -> Response:
+        """Delete-request for deleting anime from animes list of specific user"""
         user = UserDao.get_by_id(pk)
         serializer = UserAnimesSerializer(data=request.data)
         if serializer.is_valid():
@@ -32,7 +34,8 @@ class UserAnimesView(views.APIView):
         logger.warning(f'FAILED ATTEMPT TO DELETE ANIME FROM USER "{user.username}" ANIMES, BAD DATA')
         return Response(serializer.errors)
 
-    def post(self, request, pk):
+    def post(self, request, pk) -> Response:
+        """Post-request for adding anime to animes list of specific user"""
         user = UserDao.get_by_id(pk)
         serializer = UserAnimesSerializer(data=request.data)
         if serializer.is_valid():

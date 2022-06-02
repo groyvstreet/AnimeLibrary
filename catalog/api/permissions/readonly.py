@@ -2,5 +2,6 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
 class ReadOnly(BasePermission):
-    def has_permission(self, request, view):
+    """Read only permission for unauthorized users"""
+    def has_permission(self, request, view) -> bool:
         return request.method in SAFE_METHODS
