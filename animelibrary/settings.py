@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vzg2&p1558d*$b29urdq9))a1f1ym0tgj$)7$*mi&-%q@ib=1o'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -61,12 +64,6 @@ CORS_ORIGIN_WHITELIST = (
     'https://127.0.0.1:3000',
 )
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'kraken.django.sender@gmail.com'
-EMAIL_HOST_PASSWORD = 'password_for_django'
-EMAIL_PORT = 587
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -76,13 +73,19 @@ REST_FRAMEWORK = {
     )
 }
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+
 DJOSER = {
     'ACTIVATION_URL': 'activation/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'HIDE_USERS': False,
     'SERIALIZERS': {
-        'user': 'catalog.serializers.UserSerializer',
-        'current_user': 'catalog.serializers.CurrentUserSerializer',
+        'user': 'catalog.serializers.user_serializer.UserSerializer',
+        'current_user': 'catalog.serializers.current_user_serializer.CurrentUserSerializer',
     },
     'PERMISSIONS': {
         'user_list': ['rest_framework.permissions.AllowAny'],
@@ -91,13 +94,8 @@ DJOSER = {
     }
 }
 
-REDIS_HOST = '0.0.0.0'
-REDIS_PORT = '6379'
-CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
-CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 
 LOGGING = {
     'version': 1,
@@ -147,6 +145,17 @@ WSGI_APPLICATION = 'animelibrary.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'postgresql',
+#         'USER': 'db_user',
+#         'PASSWORD': 'db_password',
+#         # 'HOST': 'localhost',
+#         # 'PORT': '',
+#     }
+# }
 
 DATABASES = {
     'default': {

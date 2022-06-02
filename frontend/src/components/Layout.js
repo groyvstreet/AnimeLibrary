@@ -1,14 +1,12 @@
-import logo from "../logo.svg";
 import {Link, useNavigate} from "react-router-dom";
 import {useContext, useState} from "react";
 import {AuthContext} from "../context";
-import axios from "axios";
 import UsersService from "../API/UsersService";
 
 function Layout() {
     const navigate = useNavigate();
     const {isAuth, setIsAuth, user} = useContext(AuthContext)
-    const [active, setActive] = useState(0)
+    const [active, setActive] = useState(1)
 
     const logout = (event) => {
         event.preventDefault()
@@ -16,16 +14,11 @@ function Layout() {
         UsersService.logout(token).then(() => {
             localStorage.removeItem('token')
             setIsAuth(false)
-            //window.location.replace('http://localhost:3000/');
         })
     }
 
     return (
         <nav className="navbar navbar-expand-sm navbar-light bg-light sticky-top" style={{background: 'radial-gradient(at top, #FEFFFF, #A7CECC)'}}>
-            {/*<a className="navbar-brand" href="#">*/}
-            {/*    <img className="App-logo" src={logo} alt=""/>*/}
-            {/*    Kraken*/}
-            {/*</a>*/}
             <button className="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,11 +26,6 @@ function Layout() {
             </button>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav mr-auto">
-                    <li className={active === 0 ? 'nav-item active' : 'nav-item'} onClick={() => {
-                        setActive(0)
-                    }}>
-                        <Link className="nav-link" to="/">Главная</Link>
-                    </li>
                     <li className={active === 1 ? 'nav-item active' : 'nav-item'} onClick={() => {
                         setActive(1)
                     }}>

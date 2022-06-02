@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
-from catalog.models import Comment, Anime
+from catalog.models.comment import Comment
+from catalog.models.anime import Anime
 from catalog.tasks import send
 
 

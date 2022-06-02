@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
-
-from catalog.models import Anime, Rating
+from catalog.models.anime import Anime
+from catalog.models.rating import Rating
 
 
 class RatingDao:

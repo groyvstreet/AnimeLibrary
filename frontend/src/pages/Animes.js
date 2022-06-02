@@ -1,13 +1,10 @@
 import '../App.css';
 import {useEffect, useMemo, useState} from "react";
-import logo from "../logo.svg"
 import {useLoading} from "../hooks/useLoading";
 import AnimesService from "../API/AnimesService";
-import Layout from "../components/Layout";
 import AnimesFilter from "../components/AnimesFilter";
 import AnimesList from "../components/AnimesList";
 import Loader from "../components/Loader";
-import AnimeItem from "../components/AnimeItem";
 import GenresService from "../API/GenresService";
 import StatusesService from "../API/StatusesService";
 

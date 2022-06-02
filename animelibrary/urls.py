@@ -16,27 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
-from django.views.generic import RedirectView
-from django.conf import settings
-from django.conf.urls.static import static
-from rest_framework import routers
 
-from catalog import api, views
-from catalog.views import activate
-
-router = routers.DefaultRouter()
-router.register(r'animes', api.AnimeViewSet, 'animes')
-router.register(r'genres', api.GenreViewSet, 'genres')
-router.register(r'statuses', api.StatusViewSet, 'statuses')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('catalog.urls')),
-    path('api/', include(router.urls)),
-    path('api/', include('djoser.urls')),
-    path('api/', include('djoser.urls.authtoken')),
-    path('api/comments/', api.CommentView.as_view()),
-    path('api/users/<int:pk>/animes/', api.UserAnimesView.as_view()),
-    path('api/ratings/', api.RatingView.as_view()),
-    path('activation/<uid>/<token>/', activate),
 ]

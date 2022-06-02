@@ -1,5 +1,4 @@
 import React from "react";
-import logo from '../logo.svg'
 import {useNavigate} from "react-router-dom";
 
 const AnimeItem = ({anime}) => {

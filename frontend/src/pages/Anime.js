@@ -1,10 +1,8 @@
 import {useParams} from "react-router-dom";
-import {Component, useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useLoading} from "../hooks/useLoading";
 import AnimesService from "../API/AnimesService";
 import Loader from "../components/Loader";
-import AnimesList from "../components/AnimesList";
-import AnimesFilter from "../components/AnimesFilter";
 import React from "react";
 import CommentsService from "../API/CommentsService";
 import CommentItem from "../components/CommentItem";

@@ -8,7 +8,6 @@ import Loader from "../components/Loader";
 import AnimesFilter from "../components/AnimesFilter";
 import GenresService from "../API/GenresService";
 import {useMemo} from "react";
-import AnimeItem from "../components/AnimeItem";
 import AnimeTile from "../components/AnimeTile";
 import {isUndefined} from "axios/lib/utils";
 import {useParams} from "react-router-dom";
