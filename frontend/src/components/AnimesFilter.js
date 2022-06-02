@@ -1,5 +1,4 @@
 import SortSelect from "./SortSelect";
-import logo from "../logo.svg";
 import React from "react";
 import SortCheckBoxSelect from "./SortCheckBoxSelect";
 

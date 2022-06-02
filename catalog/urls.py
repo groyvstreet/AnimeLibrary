@@ -1,25 +1,26 @@
-import django.conf.urls.i18n
 from django.urls import path
-from . import views
+from django.urls import include
 from rest_framework import routers
-from .api import AnimeViewSet
-from .api import GenreViewSet
+from catalog.api.anime_view_set import AnimeViewSet
+from catalog.api.comment_view import CommentView
+from catalog.api.genre_view_set import GenreViewSet
+from catalog.api.rating_view import RatingView
+from catalog.api.status_view_set import StatusViewSet
+from catalog.api.user_animes_view import UserAnimesView
+from catalog.views import activate
 
 
-# router = routers.DefaultRouter()
-# router.register('api/anime', AnimeViewSet, 'anime')
-# router.register('api/genre', GenreViewSet, 'genre')
-# router.register('api/comment', CommentViewSet, 'comment')
-#
-#
-# urlpatterns = router.urls
+router = routers.DefaultRouter()
+router.register(r'animes', AnimeViewSet, 'animes')
+router.register(r'genres', GenreViewSet, 'genres')
+router.register(r'statuses', StatusViewSet, 'statuses')
 
 urlpatterns = [
-    # path('', views.index, name='index'),
-    # path('animes_filtered/', views.FilterAnimesView.as_view(), name='animes_filter'),
-    # path('animes/', views.AnimeListView.as_view(), name='animes'),
-    # path('animes/<int:pk>/', views.AnimeDetailView.as_view(), name='anime_detail'),
-    # path('animes/<int:pk>/comment/', views.comment, name='comment'),
-    #path('users/', views.UserListView.as_view(), name='users'),
-    #path('users/<int:pk>/', views.UserDetailView.as_view(), name='user_detail'),
+    path('api/', include(router.urls)),
+    path('api/', include('djoser.urls')),
+    path('api/', include('djoser.urls.authtoken')),
+    path('api/comments/', CommentView.as_view()),
+    path('api/users/<int:pk>/animes/', UserAnimesView.as_view()),
+    path('api/ratings/', RatingView.as_view()),
+    path('activation/<uid>/<token>/', activate),
 ]

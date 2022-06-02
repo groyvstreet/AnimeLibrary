@@ -11,6 +11,7 @@ function Signup() {
     const [checkPassword, setCheckPassword] = useState('')
     const navigate = useNavigate();
     const [usernameErrors, setUsernameErrors] = useState([])
+    const [emailErrors, setEmailErrors] = useState([])
     const [passwordErrors, setPasswordErrors] = useState([])
     const [isButtonDisabled, setIsButtonDisabled] = useState(true)
     const [isSended, setIsSended] = useState(false)
@@ -34,16 +35,25 @@ function Signup() {
                 .then((data) => {
                     if (isArray(data.username)) {
                         setUsernameErrors(data.username)
+                        setEmailErrors([])
+                        setPasswordErrors([])
+                    } else if (isArray(data.email)) {
+                        setEmailErrors(data.email)
+                        setUsernameErrors([])
                         setPasswordErrors([])
                     } else if (isArray(data.password)) {
                         setPasswordErrors(data.password)
                         setUsernameErrors([])
+                        setEmailErrors([])
                     } else {
                         setIsSended(true)
                         setUsername('')
                         setEmail('')
                         setPassword('')
                         setCheckPassword('')
+                        setUsernameErrors([])
+                        setEmailErrors([])
+                        setPasswordErrors([])
                     }
                 })
         }
@@ -53,7 +63,8 @@ function Signup() {
         <div className="container">
             <div className="row justify-content-center">
                 <div className="col-sm-6">
-                    {isSended && <div className="text-center">На вашу почту было отправлено письмо для завершения регистрации.</div>}
+                    {isSended && <div className="text-center">На вашу почту было отправлено письмо для завершения
+                        регистрации.</div>}
                     <div className="card text-center mt-5" style={{borderRadius: '30px'}}>
                         <div className="card-header bg-transparent">
                             <strong className="text-success">
@@ -63,6 +74,9 @@ function Signup() {
                         <div className="card-body">
                             <form>
                                 {usernameErrors.length !== 0 && usernameErrors.map((error) =>
+                                    <label className="text-danger">{error}</label>
+                                )}
+                                {emailErrors.length !== 0 && emailErrors.map((error) =>
                                     <label className="text-danger">{error}</label>
                                 )}
                                 {passwordErrors.length !== 0 && passwordErrors.map((error) =>

@@ -1,10 +1,4 @@
 import {Navigate, Route, Routes} from "react-router-dom";
-import Animes from "../pages/Animes";
-import Anime from "../pages/Anime";
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
-import Profile from "../pages/Profile";
-import Users from "../pages/Users";
 import {privateRoutes, publicRoutes} from "../router";
 import {useContext} from "react";
 import {AuthContext} from "../context";

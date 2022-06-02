@@ -1,10 +1,9 @@
 from django.contrib import admin
-from .models import Anime, Rating, Status
-from .models import Genre
-from .models import Comment
-
-
-# Register your models here.
+from .models.anime import Anime
+from .models.rating import Rating
+from .models.status import Status
+from .models.genre import Genre
+from .models.comment import Comment
 
 
 @admin.register(Anime)

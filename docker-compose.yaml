@@ -16,7 +16,7 @@ services:
     container_name: redis_
     image: "redis:alpine"
     env_file:
-      - ./.env.dev
+      - .env
 
   backend:
     container_name: catalog
@@ -26,13 +26,8 @@ services:
       - .//:/animelibrary/
     ports:
       - 8000:8000
-    environment:
-      - DEBUG=1
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
-      - CELERY_BROKER=redis://redis:6379/0
-      - CELERY_BACKEND=redis://redis:6379/0
-#    env_file:
-#      - ./.env.dev
+    env_file:
+      - .env
     depends_on:
       - db
       - redis
@@ -42,14 +37,9 @@ services:
     build: .
     command: celery -A animelibrary worker -l info
     volumes:
-      - .:/usr/src/catalog
-    environment:
-      - DEBUG=1
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
-      - CELERY_BROKER=redis://redis:6379/0
-      - CELERY_BACKEND=redis://redis:6379/0
-#    env_file:
-#      - ./.env.dev
+      - .//:/catalog/
+    env_file:
+      - .env
     depends_on:
       - backend
       - redis

@@ -1,9 +1,7 @@
 import {useEffect, useState} from "react";
 import {useLoading} from "../hooks/useLoading";
-import AnimesService from "../API/AnimesService";
 import UsersService from "../API/UsersService";
 import Loader from "../components/Loader";
-import AnimeItem from "../components/AnimeItem";
 import UserItem from "../components/UserItem";
 import React from "react";
 import {useMemo} from "react";

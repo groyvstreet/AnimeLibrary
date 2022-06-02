@@ -142,6 +142,7 @@ GitHub.sublime-settings
 # Node.js #
 node_modules
 
-.env.dev
-
+.env
 logs.log
+.coverage
+backend

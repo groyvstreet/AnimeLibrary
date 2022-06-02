@@ -1,4 +1,3 @@
-import {useState} from "react";
 import StarItem from "./StarItem";
 import React from "react";
 

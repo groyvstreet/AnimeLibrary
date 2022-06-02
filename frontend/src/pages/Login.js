@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useContext} from "react";
 import {AuthContext} from "../context";
-import axios from "axios";
 import UsersService from "../API/UsersService";
 import {useNavigate} from "react-router-dom";
 

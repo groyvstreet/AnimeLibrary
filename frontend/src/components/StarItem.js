@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {useContext} from "react";
 import {AuthContext} from "../context";
-import CommentsService from "../API/CommentsService";
 import {useParams} from "react-router-dom";
 import RatingsService from "../API/RatingsService";
 

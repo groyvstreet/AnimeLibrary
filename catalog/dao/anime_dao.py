@@ -1,4 +1,4 @@
-from catalog.models import Anime
+from catalog.models.anime import Anime
 
 
 class AnimeDao:

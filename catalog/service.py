@@ -1,8 +1,6 @@
-from django.contrib.auth.models import User
-from django.core.mail import send_mail
 from django_filters import rest_framework
-import animelibrary.settings
-from catalog.models import Anime, Rating, Comment
+from catalog.models.anime import Anime
+from catalog.models.rating import Rating
 
 
 class CharFilterInFilter(rest_framework.BaseInFilter, rest_framework.CharFilter):
