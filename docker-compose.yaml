@@ -3,7 +3,7 @@ version: '3.3'
 services:
 
   db:
-    container_name: database
+    container_name: postgresql
     image: postgres:14.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -13,41 +13,49 @@ services:
       - POSTGRES_DB=hello_django_dev
 
   redis:
-    container_name: redis
+    container_name: redis_
     image: "redis:alpine"
-    volumes:
-      - redis_data:/data
     env_file:
       - ./.env.dev
 
   backend:
-    container_name: backend
+    container_name: catalog
     build: ./
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .//:/animelibrary/
     ports:
       - 8000:8000
-    env_file:
-      - ./.env.dev
+    environment:
+      - DEBUG=1
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+#    env_file:
+#      - ./.env.dev
     depends_on:
       - db
       - redis
 
   celery:
-    container_name: celery
-    build: ./
+    container_name: celery_
+    build: .
     command: celery -A animelibrary worker -l info
     volumes:
-      - ./backend/:/usr/src/backend/
-    env_file:
-      - ./.env.dev
+      - .:/usr/src/catalog
+    environment:
+      - DEBUG=1
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+#    env_file:
+#      - ./.env.dev
     depends_on:
-      - db
+      - backend
       - redis
 
   frontend:
-    container_name: frontend
+    container_name: react
     build: ./frontend
     command: npm start
     volumes:
@@ -59,5 +67,4 @@ services:
       - CHOKIDAR_USEPOLLING=true
 
 volumes:
-  redis_data:
   postgres_data:

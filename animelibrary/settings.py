@@ -98,6 +98,8 @@ CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'redis://redis:6379/0')
+# CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER', 'redis://redis:6379/0')
 
 LOGGING = {
     'version': 1,
@@ -147,6 +149,17 @@ WSGI_APPLICATION = 'animelibrary.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'postgresql',
+#         'USER': 'db_user',
+#         'PASSWORD': 'db_password',
+#         # 'HOST': 'localhost',
+#         # 'PORT': '',
+#     }
+# }
 
 DATABASES = {
     'default': {
