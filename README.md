@@ -1,9 +1,9 @@
 # Библиотека аниме
 # Установка
-git clone https://github.com/ZayJob/Mnemosyne.git
+git clone https://github.com/groyvstreet/AnimeLibrary.git
 
-cd Mnemosyne
+cd AnimeLibrary
 
-touch .env.dev
+touch .env
 
 sudo docker-compose up -d --build
