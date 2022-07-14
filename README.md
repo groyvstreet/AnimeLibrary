@@ -7,3 +7,5 @@ cd AnimeLibrary
 touch .env
 
 sudo docker-compose up -d --build
+# Остановка контейнеров
+sudo docker-compose down -v
